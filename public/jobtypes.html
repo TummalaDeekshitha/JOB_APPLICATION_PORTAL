@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        form select {
+            width: 30%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            width: 10%;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .content-display {
+            margin: 20px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        .card {
+            width: 30%;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-dark text-white">
+        <h1>Your Website Name</h1>
+    </header>
+
+    <form class="bg-light p-3">
+        <select class="form-control">
+            <option value="">Select Field 1</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <!-- Add more options as needed -->
+        </select>
+        <select class="form-control">
+            <option value="">Select Field 2</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <!-- Add more options as needed -->
+        </select>
+        <select class="form-control">
+            <option value="">Select Field 3</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <!-- Add more options as needed -->
+        </select>
+        <button type="button" class="btn btn-success">Search</button>
+    </form>
+
+    <div class="content-display">
+        <!-- Content to display goes here -->
+        <p>This is where your main content will be displayed.</p>
+    </div>
+
+    <div class="card-container">
+        <div class="card">
+            <!-- Card 1 content goes here -->
+            <h3>Card 1</h3>
+            <p>Some content for card 1.</p>
+        </div>
+        <div class="card">
+            <!-- Card 2 content goes here -->
+            <h3>Card 2</h3>
+            <p>Some content for card 2.</p>
+        </div>
+        <div class="card">
+            <!-- Card 3 content goes here -->
+            <h3>Card 3</h3>
+            <p>Some content for card 3.</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

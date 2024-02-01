@@ -1,5 +1,5 @@
 # JobForge   JOB_APPLICATION_PORTAL
-Project Overview
+Project Overview:
 JobForge is a comprehensive job application portal designed to facilitate the interaction between job seekers and employers. The platform enables users to apply for various job opportunities while providing employers with the capability to post job listings. JobForge aims to streamline the job application process, offering a user-friendly interface
 
 

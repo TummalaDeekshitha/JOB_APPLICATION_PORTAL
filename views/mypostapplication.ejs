@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagination Example</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+ body {
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #007bff;
+    }
+
+    #myTable {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: #ffffff;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: #ffffff;
+      border: 1px solid #007bff;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+      color: #ffffff;
+      border: 1px solid #0056b3;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    #companySearchList {
+    position: absolute;
+    z-index: 1000;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    width: calc(100% - 2px); /* Adjusted width to match the input width */
+    top: 100%; /* Position below the input */
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  header {
+    background-color: #ff8300;
+    padding: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-start;
+    
+    padding: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+    #companySearchList li {
+      list-style: none;
+      padding: 8px 15px;
+      cursor: pointer;
+    }
+
+    #companySearchList li:hover {
+      background-color: #f8f9fa;
+    }
+
+    .img-fluid {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+    <header class="text-white p-3 back">
+        <div>
+            <nav>
+                <a href="/employerlogin/employerloginhandler">About</a>
+            </nav>
+        </div>
+        <div>Welcome,<%=user%>| <a href="/logout">Logout</a></div>
+    </header>
+    <div class="container mt-4">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h1><%= status%> Candidates 
+              <span id="cat" style="display: none;"><%= Category %></span>  
+              <span id="job" style="display: none;"><%= Job %></span>
+              <span id="company" style="display: none;"><%= company %></span>
+            </h1>
+          </div>
+          <!-- Add Approved and Rejected buttons -->
+          <div class="col-md-6 text-end">
+            <button type="button" class="btn btn-success" onclick="filterCandidates('approved')">Approved</button>
+            
+          </div>
+        </div>
+      
+   
+
+    <div id="documentContainer">
+      <table id="myTable" class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Company</th>
+            <th>Job</th>
+            <th>Phone</th>
+            <th>Category</th>
+            <th>Actions</th>
+            <th></th> <!-- Empty cell for Send Mail -->
+          </tr>
+        </thead>
+        <tbody>
+         
+        </tbody>
+      </table>
+    </div>
+ 
+    <% if(totalPages > 0) { %>
+      <div class="btn-group" role="group" aria-label="Pagination">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <button type="button" class="btn btn-outline-primary" onclick="fetchPage('<%= i %>')">Page <%= i %></button>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="text-center mt-4">
+        <img src="/images/noresultfound.jpg" alt="No documents found" class="img-fluid mb-4">
+        <p class="lead">Sorry, no Applications found.</p>
+        <p>Feel free to explore other pages or try a different search.</p>
+      </div>
+    <% } %>
+  </div>
+
+  <script>
+     async function filterCandidates(status) {
+      const category = document.getElementById('cat').innerText;
+      const job = document.getElementById('job').innerText; 
+      const company=document.getElementById('company').innerText;
+     const res = await fetch(`/employerlogin/findcandidatecompany?category=${category}&job=${job}&company=${company}&status=approved`);
+     console.log(res.url);
+     window.location.href = res.url;
+     
+    }
+    function fetchPage(page) {
+      const category = document.getElementById('cat').innerText;
+      const job = document.getElementById('job').innerText;
+      const company=document.getElementById('company').innerText;
+      fetch(`/employerlogin/getDocumentscompany?page=${page}&category=${category}&job=${job}&company=${company}&status=applied`)
+        .then(response => response.json())
+        .then(documents => {
+          const tableBody = document.querySelector('#myTable tbody');
+          tableBody.innerHTML = '';
+
+          documents.forEach(doc => {
+            const row = tableBody.insertRow();
+
+            const nameCell = row.insertCell(0);
+            nameCell.textContent = doc.name;
+
+            const emailCell = row.insertCell(1);
+            emailCell.textContent = doc.email;
+
+            const companyCell = row.insertCell(2);
+            companyCell.textContent = doc.companyname;
+
+            const jobCell = row.insertCell(3);
+            jobCell.textContent = doc.jobname;
+
+            const phoneCell = row.insertCell(4);
+            phoneCell.textContent = doc.phoneno;
+
+            const categoryCell = row.insertCell(5);
+            categoryCell.textContent = doc.category;
+
+            const actionsCell = row.insertCell(6);
+            const viewResumeLink = document.createElement('a');
+            viewResumeLink.href = `/employerlogin/viewResumelink?id=${doc._id}`;
+            viewResumeLink.textContent = 'View Resume';
+            actionsCell.appendChild(viewResumeLink);
+
+            const actionsCell2 = row.insertCell(7);
+            const sendMailLink = document.createElement('a');
+            sendMailLink.href = `/employerlogin/sendMail?email=${doc.email}&category=${doc.category}&job=${doc.jobname}&company=${doc.companyname}`;
+            sendMailLink.textContent = 'Send Mail';
+            actionsCell2.appendChild(sendMailLink);
+          });
+        })
+        .catch(error => console.error('Error fetching documents:', error));
+    }
+
+    // Fetch and display documents for the first page on page load
+    fetchPage(1);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

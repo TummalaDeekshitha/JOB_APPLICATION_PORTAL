@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<style>
+.circular-image {
+    border-radius:50%;
+    overflow: hidden;
+    width: 150px; /* Adjust the size of the circular image */
+    height: 150px; /* Adjust the size of the circular image */
+    margin: 0 auto; /* Center the circular image */
+}
+.border
+{
+border:2px solid black;
+margin: 30px;
+
+ 
+}
+.circular-image img {
+    width: 100%;
+    height: auto;
+}
+.popup {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5);
+justify-content: center;
+align-items: center;
+}
+.popup-content {
+background: #fff;
+padding: 20px;
+width: auto;
+height:auto;
+text-align: center;
+border-radius: 5px;
+border: 2px solid black;
+
+}
+</style>
+
+<body>
+   
+    <div class="container">
+        <h1>Results for Category: <%= category %>, Role: <%= role %></h1>
+        
+        <% if (documents.length) { %>
+            <div class="row">
+                <% documents.forEach(doc => { %>
+                    <% if (doc.openings > 0) { %>
+                        <div class="col-md-3 m-4 border shadow-lg p-3 mb-5 bg-white rounded">
+                            <div class="circular-image"><img class="circular-image"/></div>
+                            
+                            <div class="list-group m-2"><%=doc.companyname %></b></div>
+                            <div id="jobname" class="list-group-item list-group-item-action list-group-item-warning m-1 p-1">Job Title: <%= doc.jobname %></div>
+                            <div class="list-group-item list-group-item-action list-group-item-success m-1 p-1">openings: <%= doc.openings %></div>
+                            <div class="list-group-item list-group-item-action list-group-item-primary m-1 p-1">lastdate: <%= doc.lastdate %></div>
+                            <button class="btn btn-primary m-1 apply-button" data-category="<%=category%>" data-companyname="<%= doc.companyname %>" data-jobname="<%= doc.jobname %>">apply</button>
+
+                            </div>
+                        
+                    
+                    <% } %>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p>No matching documents found.</p>
+        <% } %>
+    </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var applyButtons = document.querySelectorAll('.apply-button');
+
+        applyButtons.forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                var jobname = event.target.getAttribute('data-jobname');
+                var company = event.target.getAttribute('data-companyname');
+                var category = event.target.getAttribute('data-category');
+                window.location.href="./public/index.html"
+               // location.href = `../universalapplicationform.html?company=${company}&job=${jobname}&category=${category}`;
+            });
+        });
+    });
+       </script>
+
+   
+    
+    <!-- Add other JS or Bootstrap dependencies as needed -->
+</body>
+</html>
+

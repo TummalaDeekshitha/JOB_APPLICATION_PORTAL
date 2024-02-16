@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Job Portal</title>
+    <!-- Add Bootstrap CSS link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .back {
+            background-color: #ff8300;
+        }
+        header {
+    background-color: #ff8300;
+    padding: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-start;
+    
+    padding: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+    </style>
+    <script>
+    async function updateField2Options() {
+        var categorySelect = document.getElementById('category');
+        var field2Select = document.getElementById('field2');
+        
+        // Enable the second dropdown
+        field2Select.disabled = false;
+        const cat=categorySelect.value;
+        // Clear existing options
+        field2Select.innerHTML = '<option value="" disabled selected>Job Name</option>';
+        await fetch(`http://localhost:7001/${cat}sapi`).then((res)=>{
+         return res.json();
+        }).then((data)=>{
+          const arr=new Array();
+          let arraymap;
+           const currentDate=new Date();
+           arraymap=data.map((val,i,arr)=>{
+            if(!arr.includes(data[i].jobname))
+            {
+            field2Select.innerHTML += `<option value=${data[i].jobname} name=${data[i].jobname}>${data[i].jobname}</option>`;
+             arr.push(data[i].jobname);
+            }
+     
+           })
+        }).catch((error)=>{
+            console.log(error);
+        })
+    }
+</script>
+</head>
+<body>
+
+    <header class="text-white p-3 back">
+        <div>
+            <!-- <nav>
+                <a href="/about">About</a>
+            </nav> -->
+        </div>
+        <div>Welcome,<%=user%>| <a href="/logout">Logout</a></div>
+    </header>
+
+    <div class="container my-4">
+
+        <div class="row">
+
+            <!-- Card 1: Post a Job -->
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="/images/maxresdefault (1).jpg" class="card-img-top mb-5 p-5" alt="Post a Job Image">
+                    <div class="card-body p-10">
+                        <h2 class="card-title mt-5">Post a Job</h2>
+                        <p class="card-text">Share your job opportunities with the world. Create a detailed job listing, including requirements, responsibilities, and benefits.</p>
+
+                        <!-- Content for posting Core Jobs -->
+                        <h4 class="mt-4">Core Jobs</h4>
+                        <p>Explore opportunities in core engineering fields.</p>
+
+                        <!-- Content for posting Software Jobs -->
+                        <h4 class="mt-4">Software Jobs</h4>
+                        <p>Discover openings in the exciting world of software development.</p>
+                        <a href="/employerlogin/viewyourposts"  class="btn btn-primary mt-3">view your posts</a>
+                        <a href="/employerlogin/jobpost" class="btn btn-primary mt-3">Post Job</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Find the Right Candidate -->
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="/images/about-img.jpg" class="card-img-top mb-5" alt="Find Candidate Image">
+                    <div class="card-body">
+                        <h2 class="card-title mt-4">Find the Right Candidate</h2>
+                        <p class="card-text">
+                            In your quest to build a stellar team, explore a diverse array of qualified candidates. Leverage our platform to discover skilled professionals who align with your company's vision and values.
+                        </p>
+                        
+                        <form class="bg-light p-4" action="/employerlogin/findcandidate?status=applied" method="post">
+                            <div class="mb-3">
+                                
+                                <select class="form-select" name="category" id="category" onchange="updateField2Options()">
+                                    <option value="" disabled selected>Select Category</option>
+                                    <option value="corejob">core</option>
+                                    <option value="softwarejob">Software</option>
+                                    <option value="freelancer">Freelancer<option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                                <select class="form-control mt-4" name="role" id="field2" disabled>
+        
+        
+                                    <!-- Add more options as needed -->
+                                </select>
+                            
+                                
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Find Candidate</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            
+
+        </div>
+
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

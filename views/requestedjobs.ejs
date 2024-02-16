@@ -124,8 +124,8 @@ nav a:hover {
                 <% jobdata.forEach(data => { %>
                     <% if (data.openings > 0 && new Date(data.lastdate).getTime() >= new Date().getTime()) { %>
                         <div class="col-md-4">
-                            <div class="card job-card border shadow-lg p-3 mb-5 bg-white rounded"
-                                onclick="popboxfun('<%= data.jobname %>', <%= data.logo && data.logo.data ? JSON.stringify(data.logo.data.toString('base64')) : 'null' %>, '<%= data.description %>')">
+                            <div class="card job-card border shadow-lg p-3 mb-5 bg-white rounded">
+                                                                                     
                                 <h3 class="text-center">Company: <%= data.companyname %></h3>
                                 <%if (data.logo?.data){%>
                                     <img src="data:image/jpeg;base64,<%= data.logo.data.toString('base64') %>"

@@ -34,9 +34,7 @@ nav a {
     padding: 10px 20px;
 }
 
-nav a:hover {
-    background-color: #555;
-}
+
 
     .popup {
         display: none;
@@ -59,19 +57,45 @@ nav a:hover {
         border-radius: 5px;
         border: 2px solid black;
     }
+    .logout-btn:hover,
+        .about-btn:hover {
+            background-color: #e23c00;
+        }
+
+        .logout-btn,.about-btn {
+            margin-right: 20px;
+        }
+
+        .logout-btn,
+        .about-btn {
+            width: auto;
+            margin: 0 10px;
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+        }
 </style>
 
 <body>
-    <header class="text-white mb-2 back">
-        
+    
+    <header class="text-white back">
         <div>
             <nav>
-                <a href="/about">About</a>
+                <a class="about-btn" href="/about">About</a>
             </nav>
         </div>
-        <div>Welcome,<%=user%>| <a href="/logout">Logout</a></div>
+        <div class="button-container">
+            <div>Welcome, <%=user%></div>
+            <div>
+                <nav>
+                    <a class="about-btn" href="/logout">logout</a>
+                </nav>
+            </div>
+            
+        </div>
     </header>
-
     <div class="container">
         <h1 class="mb-2">Results for Category: <%= category %>, Role: <%= role %></h1>
 
@@ -89,8 +113,10 @@ nav a:hover {
                                     <p class="card-text">Job Title: <%= doc.jobname %></p>
                                     <p class="card-text">Openings: <%= doc.openings %></p>
                                     <p class="card-text">Last Date: <%= doc.lastdate %></p>
-                                    <button class="btn btn-success m-1"
-                                        onclick="window.location.href='/universalapplicationform.html?company=<%=doc.companyname %>&job=<%= doc.jobname %>&category=<%=category%>'">Apply</button>
+                                    <button class="btn btn-success m-1 apply-button"
+                                        data-jobname="<%= doc.jobname %>"
+                                        data-companyname="<%= doc.companyname %>"
+                                        data-category="<%= category %>">Apply</button>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +144,7 @@ nav a:hover {
                     console.log(`${jobname},${companyname},${category}`)
 
                     try {
-                        const response = await fetch('http://localhost:7001/applicationsearch', { method: 'GET' });
+                        const response = await fetch('/applicationsearch', { method: 'GET' });
 
                         if (response.ok) {
                             // Redirect to the desired location

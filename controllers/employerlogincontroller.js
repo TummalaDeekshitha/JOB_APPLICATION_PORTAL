@@ -292,7 +292,7 @@ const findcandidate=async(req,res)=>{
         const role = req.query.job;
         const skip = (pno - 1) * 10;
         const status=req.query.status;
-       
+       const cat=req.query.category;
         let documents;
     
         if(cat!="any")

@@ -1,4 +1,3 @@
-<!-- Updated softwarejobs.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,8 +7,7 @@
     <title>Available <%=category %> Jobs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -25,36 +23,36 @@
             justify-content: center;
             align-items: center;
         }
+
         header {
-    background-color: #ff8300;
-    padding: 10px;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+            background-color: #ff8300;
+            padding: 10px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-nav {
-    display: flex;
-    justify-content: flex-start;
-    
-    padding: 10px;
-}
+        nav {
+            display: flex;
+            justify-content: flex-start;
+            padding: 10px;
+        }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-}
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
 
-nav a:hover {
-    background-color: #555;
-}
+        nav a:hover {
+            background-color: #555;
+        }
 
         .popup-content {
             background: #fff;
             padding: 20px;
-            width:600px;
+            width: 600px;
             height: 800px;
             text-align: center;
             border-radius: 5px;
@@ -69,8 +67,10 @@ nav a:hover {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
+            padding: 20px; /* Increased padding */
             cursor: pointer;
+            width: 350px; /* Increased width */
+            height: 500px; /* Increased height */
         }
 
         .job-card:hover {
@@ -79,7 +79,8 @@ nav a:hover {
 
         .job-card img {
             width: 100%;
-            height: auto;
+            height: 250px; /* Adjusted image height */
+            object-fit: cover;
             border-radius: 10px 10px 0 0;
         }
 
@@ -88,27 +89,66 @@ nav a:hover {
         }
 
         .job-card button {
-            width: 48%; /* Adjust the width as needed */
+            width: calc(50% - 10px);
             margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .job-card button:hover {
+            background-color: #3396ff;
         }
 
         .search-container {
             margin-bottom: 20px;
+        }
+
+        .logout-btn,
+        .about-btn {
+            background-color: #ff8300;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover,
+        .about-btn:hover {
+            background-color: #e23c00;
+        }
+
+        .about-btn {
+            margin-right: 20px;
+        }
+
+        .logout-btn,
+        .about-btn {
+            width: auto;
+            margin: 0 10px;
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
 
 <body>
 
-    <header class="text-white  back">
+    <header class="text-white back">
         <div>
-           <nav>
-                    <a href="/about">About</a>
-                </nav> 
+            <nav>
+                <a class="about-btn" href="/about">About</a>
+            </nav>
         </div>
-        <div>Welcome, <%=user%>| <a href="/logout">Logout</a></div>
-      </header>
-   
+        <div class="button-container">
+            <div>Welcome, <%=user%></div>
+            <a class="logout-btn" href="/logout">Logout</a>
+        </div>
+    </header>
+
     <div class="container">
         <h1 class="text-center mt-3">Available <%=category %> Jobs </h1>
         <span id="category" hidden><%=category %></span>
@@ -121,30 +161,31 @@ nav a:hover {
 
         <div id="info" class="row">
             <% if (jobdata.length > 0) { %>
-                <% jobdata.forEach(data => { %>
-                    <% if (data.openings > 0 && new Date(data.lastdate).getTime() >= new Date().getTime()) { %>
-                        <div class="col-md-4">
-                            <div class="card job-card border shadow-lg p-3 mb-5 bg-white rounded">
-                                                                                     
-                                <h3 class="text-center">Company: <%= data.companyname %></h3>
-                                <%if (data.logo?.data){%>
-                                    <img src="data:image/jpeg;base64,<%= data.logo.data.toString('base64') %>"
-                                        alt="Company Logo" class="card-img-top" />
-                                <% } %>
-                                <div class="card-body">
-                                    <div class="text-center">Jobname: <%= data.jobname %></div>
-                                    <div class="text-center">Openings: <%= data.openings %></div>
-                                    <div class="text-center">Last Date: <%= data.lastdate %></div>
-                                    <button class="btn btn-primary m-1">More Info</button>
-                                    <button class="btn btn-success m-1"
-                                        onclick="window.location.href='/universalapplicationform.html?company=<%= data.companyname %>&job=<%= data.jobname %>&category=<%=category%>'">Apply</button>
-                                </div>
-                            </div>
-                        </div>
+            <% jobdata.forEach(data => { %>
+            <% if (data.openings > 0 && new Date(data.lastdate).getTime() >= new Date().getTime()) { %>
+            <div class="col-md-4">
+                <div class="card job-card border shadow-lg p-3 mb-5 bg-white rounded">
+                    <h3 class="text-center">Company: <%= data.companyname %></h3>
+                    <%if (data.logo?.data){%>
+                    <img src="data:image/jpeg;base64,<%= data.logo.data.toString('base64') %>" alt="Company Logo"
+                        class="card-img-top" />
                     <% } %>
-                <% }); %>
+                    <div class="card-body">
+                        <div class="text-center">Jobname: <%= data.jobname %></div>
+                        <div class="text-center">Openings: <%= data.openings %></div>
+                        <div class="text-center">Last Date: <%= data.lastdate %></div>
+                        <button class="btn btn-primary m-1"
+                            onclick="popboxfun('<%= data.jobname %>', <%= data.logo && data.logo.data ? `'${data.logo.data.toString('base64')}'` : 'null' %>, '<%= data.description %>')">More
+                            Info</button>
+                        <button class="btn btn-success m-1"
+                            onclick="window.location.href='/universalapplicationform.html?company=<%= data.companyname %>&job=<%= data.jobname %>&category=<%=category%>'">Apply</button>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <% }); %>
             <% } else { %>
-                <p class="text-center">No matching documents found.</p>
+            <p class="text-center">No matching documents found.</p>
             <% } %>
         </div>
 
@@ -167,9 +208,9 @@ nav a:hover {
                 let res;
 
                 // Check if the query is not empty
-                 
-                    res = await fetch(`/searchindexjob?myquery=${query}&category=${category}`);
-                
+
+                res = await fetch(`/searchindexjob?myquery=${query}&category=${category}`);
+
 
                 const data = await res.json(); // Assuming the response is JSON
                 updateJobCards(data);

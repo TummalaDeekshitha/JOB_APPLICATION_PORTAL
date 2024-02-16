@@ -46,7 +46,7 @@ nav a:hover {
         const cat=categorySelect.value;
         // Clear existing options
         field2Select.innerHTML = '<option value="" disabled selected>Job Name</option>';
-        await fetch(`http://localhost:7001/${cat}sapi`).then((res)=>{
+        await fetch(`/${cat}sapi`).then((res)=>{
          return res.json();
         }).then((data)=>{
           const arr=new Array();

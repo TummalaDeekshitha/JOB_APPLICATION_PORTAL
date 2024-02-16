@@ -53,7 +53,7 @@ app.get('/images/:key',(req,res)=>{
 })
 const start=async()=>{
     try{
-        app.listen(7001,()=>{
+        app.listen(7002,()=>{
             console.log("hurray u got connected");
         })
         

@@ -7,14 +7,14 @@ const  username=process.env.USERNAME
  console.log(username);
 const connectDB = async() => {
     
-    const url = `mongodb+srv://deekshithareddy2223:gXkPedRi3ZJadM22@mycluster.mkhf17a.mongodb.net/mydb?retryWrites=true&w=majority`
+    const url = process.env.URL;
  
     await mongoose.connect(url)
 
         .then(() => {
             console.log(password);
     console.log(username);
-            console.log(`Connected to DB: ${url}`);
+            console.log(`Connected to DB `);
         })
         .catch((err) => {
             console.error(`Error connecting to DB: ${err.message}`);

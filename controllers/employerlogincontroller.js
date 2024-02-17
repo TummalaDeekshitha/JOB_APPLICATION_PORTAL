@@ -9,6 +9,8 @@ const nodemailer=require("nodemailer")
 const mongoose=require("mongoose");
 const { error } = require("console");
 const grid = require('gridfs-stream');
+require('dotenv').config();
+const  username=process.env.USERNAME
 // app.use(express.urlencoded({ extended: false ,limit: '50mb'}));
 // app.use(express.static(path.join(__dirname,"public")));
 const jwt=require("jsonwebtoken")
@@ -65,15 +67,15 @@ const employersendotp=async(req,res)=>{
             const transporter=nodemailer.createTransport({
                         service: 'gmail',
                   auth: {
-                    user: '20311a1206@sreenidhi.edu.in',
-                    pass: '20311A1206',
+                    user: process.env.EMAIL,
+                    pass: process.env.EMAILPASSWORD,
                   },
                     })
                     const mailOptions = {
-                        from: '20311a1206@sreenidhi.edu.in',
+                        from: process.env.EMAIL,
                         to: req.body.email,
                         subject: 'JobForger',
-                        text: `your OTP : ${otp1}\n `,
+                        text: `<html><p>your OTP for jobforge : ${otp1}\n<p></html> `,
                       };
                  transporter.sendMail(mailOptions, (error, info) => {
                         if (error) {
@@ -407,7 +409,7 @@ const getDocumentscompany=async(req,res)=>{
               }
             },
             {
-              $7000limit: 10
+              $limit: 10
             }
           ]);
         }

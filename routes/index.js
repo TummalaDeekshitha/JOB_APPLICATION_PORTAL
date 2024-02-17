@@ -133,6 +133,10 @@ router.get("/applicationdocument", async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+router.get("/catapp", protect,(req, res) => {
+
+    res.render("../views/chat.ejs");
+});
 
 router.get("/softwarejobsapi",softwarejobsapi)
 module.exports=router;

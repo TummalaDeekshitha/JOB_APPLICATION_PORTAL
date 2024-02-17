@@ -34,9 +34,36 @@ nav a {
     padding: 10px 20px;
 }
 
-nav a:hover {
-    background-color: #555;
-}
+.logout-btn,
+        .about-btn {
+            background-color: #ff8300;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover,
+        .about-btn:hover {
+            background-color: #e23c00;
+        }
+
+        .about-btn {
+            margin-right: 20px;
+        }
+
+        .logout-btn,
+        .about-btn {
+            width: auto;
+            margin: 0 10px;
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+        }
         .applied {
             background-color: #ffe6e6;
         }
@@ -48,14 +75,18 @@ nav a:hover {
 </head>
 <body>
 <!-- Inside your myapplications.ejs file -->
-<header class="text-white p-3 back">
+<header class="text-white back">
     <div>
         <nav>
-            <a href="/about">About</a>
+            <a class="about-btn" href="/about">About</a>
         </nav>
     </div>
-    <div>Welcome,<%=user%>| <a href="/logout">Logout</a></div>
+    <div class="button-container">
+        <div>Welcome, <%=user%></div>
+        <a class="logout-btn" href="/logout">Logout</a>
+    </div>
 </header>
+
 
 
 <div class="container mt-4">

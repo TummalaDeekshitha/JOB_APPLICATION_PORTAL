@@ -47,16 +47,22 @@ nav {
     justify-content: flex-start;
     
     padding: 10px;
+    border-radius: 2px;
 }
 
 nav a {
     color: white;
     text-decoration: none;
     padding: 10px 20px;
+  
+
 }
 
 nav a:hover {
-    background-color: #555;
+  background-color: #e25f00;
+}
+a:hover{
+  background-color: #e25f00;
 }
 
     th {
@@ -118,11 +124,22 @@ nav a:hover {
   <header class="text-white p-3 back">
     <div>
         <nav>
-            <a href="/employerlogin/employerloginhandler">About</a>
+            <a class="nav-link chat-btn m-2 p-2" href="/employerlogin/employerloginhandler">About</a>
+            <a class="nav-link chat-btn m-2 p-2" href="/catapp">Collaboration Room</a>
         </nav>
     </div>
-    <div>Welcome,<%=user%>| <a href="/logout">Logout</a></div>
+    <div class="ml-auto">
+        <div class="row">
+            <div class="col">
+                <div class="text-primary m-2 p-2">Welcome, <%=user%></div>
+            </div>
+            <div class="col">
+                <a class="nav-link chat-btn m-2 p-2" href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
 </header>
+
   <div class="container mt-4">
     <div class="row mb-4">
       <div class="col-md-6">

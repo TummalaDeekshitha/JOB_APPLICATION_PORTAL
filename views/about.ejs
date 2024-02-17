@@ -88,6 +88,12 @@
         .logout-btn:hover {
             background-color: #e25f00;
         }
+        .about-btn:hover {
+            background-color: #e25f00;
+        }
+        .chat-btn:hover {
+            background-color: #e25f00;
+        }
     </style>
     <script>
         async function updateField2Options() {
@@ -99,7 +105,7 @@
             const cat = categorySelect.value;
             // Clear existing options
             field2Select.innerHTML = '<option value="" disabled selected>Job Name</option>';
-            await fetch(`http://localhost:7001/${cat}sapi`).then((res) => {
+            await fetch(`/${cat}sapi`).then((res) => {
                 return res.json();
             }).then((data) => {
                 const arr = new Array();
@@ -157,7 +163,12 @@
                                 <a class="nav-link" href="index.ejs">Home <span class="sr-only">(current)</span></a>
                             </li> -->
                             <li class="nav-item active">
-                                <a class="nav-link" href="/about"> About</a>
+                                <a class="nav-link chat-btn" href="/catapp">
+                                     <i class="fas fa-users "></i> Collaboration Room
+                                </a>
+                             </li>
+                            <li class="nav-item active">
+                                <a class="nav-link about-btn" href="/about"> About</a>
                             </li>
                         </ul>
 

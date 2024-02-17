@@ -46,7 +46,7 @@ const registeremployer=async(req,res)=>{
         const transporter=nodemailer.createTransport({
                     service: 'gmail',
               auth: {
-                user: '20311a1206@sreenidhi.edu.in',
+                user: process.env.EMAIL,
                 pass: '20311A1206',
               },
                 })

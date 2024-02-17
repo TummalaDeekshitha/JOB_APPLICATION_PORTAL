@@ -32,7 +32,7 @@ describe('signup function', () => {
         countDocumentsStub.restore();
     });
 
-    it('should create a new account and render "signin.ejs" with message "account done" if email does not exist', async () => {
+    it('should create a new account and render "signin.ejs" with message "account done" if email does not exist', async (done) => {
         
         const req = {
             body: {
@@ -58,6 +58,7 @@ describe('signup function', () => {
 
        
         countDocumentsStub.restore();
+        done();
     }).timeout(10000);
 
    

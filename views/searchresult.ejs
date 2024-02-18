@@ -113,10 +113,8 @@ nav a {
                                     <p class="card-text">Job Title: <%= doc.jobname %></p>
                                     <p class="card-text">Openings: <%= doc.openings %></p>
                                     <p class="card-text">Last Date: <%= doc.lastdate %></p>
-                                    <button class="btn btn-success m-1 apply-button"
-                                        data-jobname="<%= doc.jobname %>"
-                                        data-companyname="<%= doc.companyname %>"
-                                        data-category="<%= category %>">Apply</button>
+                                        <button class="btn btn-success m-1"
+                            onclick="window.location.href='/universalapplicationform.html?company=<%= doc.companyname %>&job=<%= doc.jobname %>&category=<%=category%>'">Apply</button>
                                 </div>
                             </div>
                         </div>

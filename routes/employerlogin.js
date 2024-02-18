@@ -72,8 +72,9 @@ router.get("/jobpost",employerprotect,jobpost)
 router.post("/postjob",upload.single("logo"),employerprotect,postjob)
 router.get("/catapp",employerprotect, (req, res) => {
 
-    res.render("../views/chat.ejs");
+    res.render("../views/empchat.ejs");
 });
+
 // const start=async()=>{
 // try{
 //   app.listen(5000,()=>{

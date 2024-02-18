@@ -7,8 +7,8 @@ const session = require("express-session");
 const otpGenerator = require('otp-generator')
 const nodemailer=require("nodemailer")
 const mongoose=require("mongoose");
-const { error } = require("console");
-const grid = require('gridfs-stream');
+//const { error } = require("console");
+//const grid = require('gridfs-stream');
 app.use(express.urlencoded({ extended: false ,limit: '50mb'}));
 // app.use(express.static(path.join(__dirname,"public")));
 const jwt=require("jsonwebtoken")
@@ -19,7 +19,9 @@ app.use(express.json({ limit: '50mb' }));
 const { stringify } = require('querystring');
 const multer=require("multer");
 const upload=multer({dest:"uploads/"});
+////
 const {uploadfile}=require("../s3")
+////
 var router = express.Router();
 var Employerdetail=require("../model/employerschemacoll");
 
@@ -47,12 +49,12 @@ const registeremployer=async(req,res)=>{
                     service: 'gmail',
               auth: {
                 user: process.env.EMAIL,
-                pass: '20311A1206',
+                pass: process.env.EMAILPASSWORD,
               },
                 })
                 const mailOptions = {
-                    from: '20311a1206@sreenidhi.edu.in',
-                    to: req.body.email,
+                    from: process.env.EMAIL,
+                    to: process.env.ADMINEMAIL,
                     subject: "Jobforge",
                     text: `${subject} `,
                   };

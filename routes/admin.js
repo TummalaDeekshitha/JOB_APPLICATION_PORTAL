@@ -10,7 +10,7 @@
 
 var Employerdetail=require("../model/employerschemacoll");
 const {adminprotect}=require("../middleware/adminprotect");
-const {verify,adminabout,adminsendotp,adminloginverifyotp,adminloginconfirmpassword,removeemployer,rejectemployer,addemployer}=require("../controllers/admincontroller.js")
+const {verify,adminabout,adminsendotp,adminloginverifyotp,adminloginconfirmpassword,removeemployer,rejectemployer,addemployer, applicationtrendsdocuments}=require("../controllers/admincontroller.js")
 router.get("/",verify);
 router.post("/adminabout",adminabout)
 router.get("/adminforgotpassword",(req,res)=>{
@@ -33,5 +33,10 @@ const count=await Employerdetail.countDocuments({email:email1});
 const s=await Employerdetail.updateOne({email:email1},{$set :{name:req.body.username,email:req.body.eamil,pass:req.body.password,admin:true,eligible:true}},{ upsert: true } )
  console.log(s);
 })
+router.get("/applicationtrends",(req,res)=>{
+    res.render("../views/applicationtrends.ejs")
+})
+router.get("/applicationtrendsdocuments",adminprotect,applicationtrendsdocuments);
+
 
 module.exports=router

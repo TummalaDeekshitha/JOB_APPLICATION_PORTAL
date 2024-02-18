@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-bQN6E3LZ+bD/NNADhUKFOqCmFql2gj6D66ObSE4XTX7GrWd17TNnxa+1OxDL0v3/qy6BRX2M0kKxI7jIVq3G6g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container1 {
+            width: 1000px;
+            height: 700px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .container {
+            background-color: #f8f9fa;
+            height: 100%;
+            overflow-y: scroll;
+            padding: 10px;
+        }
+
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+        .right {
+            background-color: #007bff;
+            color: white;
+            float: right;
+            clear: both;
+        }
+
+        .left {
+            background-color: #e9ecef;
+            clear: both;
+        }
+
+        #send-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .navbar-dark {
+            background-color: #343a40 !important;
+        }
+
+        .navbar-brand {
+            margin-right: 0;
+        }
+
+        #sendBtn {
+            background-color: green;
+            border-color: green;
+        }
+
+        #sendBtn:hover {
+            background-color: darkgreen;
+            border-color: darkgreen;
+        }
+
+        .logo {
+            width: 30px;
+            margin-right: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Increased alpha value for more blur */
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    transition: background-color 0.5s ease;
+}
+
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            border: 1px solid #888;
+            max-width: 700px;
+            border-radius: 10px;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .modal-content img {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        /* Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container1">
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <img src="./images/logo.png" class="logo" alt="Logo">
+                <span class="navbar-brand mb-0 h1">JobForge</span>
+                <span id="usernameDisplay" class="ml-auto navbar-brand mb-0 h1"></span>
+                <img src="/images/icons8-test-account-96.png" class="logo" alt="Profile Logo">
+            </div>
+        </nav>
+
+        <div class="container" id="messageContainer" style="display: none;">
+            <!-- Message container -->
+        </div>
+        <div id="send-container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-10">
+                        <input type="text" name="messageInp" id="messageInp" class="form-control"
+                            placeholder="Type your message">
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" type="submit" id="sendBtn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a  href="/employerlogin/employerloginhandler" class="btn btn-danger btn-block mt-3 w-100px" id="endChatBtn">
+            <i class="fas fa-sign-out-alt mr-2"></i> Exit Chat
+        </a>
+        
+    </div>
+
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col-md-6 order-md-2">
+                    <img src="/images/chatpicture.jpg" alt="User Image" class="img-fluid ">
+                </div>
+                <div class="col-md-6 order-md-1 p-5 pr-0 ">
+                    <h1 class="mb-4">Enter Name to Join</h1>
+                    <input type="text" id="username" class="form-control mb-3" placeholder="Enter your name" required>
+                    <button id="joinChat" class="btn btn-primary btn-block">Join Chat</button>
+                    <a href="/employerlogin/employerloginhandler" id="aboutBtn" class="btn btn-secondary btn-block mt-3">About</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS and Socket.io -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('http://localhost:6557');
+        const messageInput = document.getElementById('messageInp');
+        const messageContainer = document.getElementById('messageContainer');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const modal = document.getElementById("myModal");
+
+        const appendMessage = (message, position) => {
+            const messageElement = document.createElement('div');
+            messageElement.innerText = message;
+            messageElement.classList.add('message', position);
+            messageContainer.appendChild(messageElement);
+            if (position === 'left') {
+                const audio = new Audio('../notification.mp3'); // Replace with the correct path
+                audio.play();
+            }
+            // Scroll to bottom
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        };
+
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                appendMessage(`You: ${message}`, 'right');
+                socket.emit("send", message);
+                messageInput.value = "";
+            }
+        });
+
+        document.getElementById('aboutBtn').addEventListener('click', () => {
+            // Redirect to the about section or perform any other desired action
+            window.location.href = "#about";
+        });
+
+        document.getElementById('joinChat').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+
+            if (!username) {
+                alert("Please enter your name to join the chat.");
+                return;
+            }
+
+            usernameDisplay.textContent = username;
+
+            socket.emit('new-user-joined', username);
+
+            modal.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+            modal.style.transition = "background-color 0.5s ease";
+
+            modal.style.display = "none";
+
+            // Display the message container
+            messageContainer.style.display = "block";
+        });
+
+        socket.on('receive', (data) => {
+            appendMessage(`${data.username}: ${data.message}`, 'left');
+        });
+
+        socket.on('user-joined', (username) => {
+            appendMessage(`${username} joined the chat`, 'right');
+        });
+
+        socket.on('left', (username) => {
+            appendMessage(`${username} left the chat`, 'left');
+        });
+
+        document.getElementById('endChatBtn').addEventListener('click', () => {
+            socket.disconnect();
+        });
+    </script>
+</body>
+
+</html>

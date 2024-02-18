@@ -2,18 +2,17 @@ const bcrypt = require('bcrypt');
 const express=require("express");
 const path=require("path");
 const app=express();
-
-const session = require("express-session");
+require('dotenv').config();
+//const session = require("express-session");
 const otpGenerator = require('otp-generator')
 const multer=require("multer");
 const nodemailer=require("nodemailer")
 app.use(express.static(path.join(__dirname,"public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
 const mongoose=require("mongoose");
-const { error } = require("console");
-const grid = require('gridfs-stream');
+//const { error } = require("console");
+//const grid = require('gridfs-stream');
 app.use(express.urlencoded({ extended: false ,limit: '50mb'}));
 // app.use(express.static(path.join(__dirname,"public")));
 const jwt=require("jsonwebtoken")
@@ -21,17 +20,17 @@ const cookieParser=require("cookie-parser")
 app.use(cookieParser())
 app.use(express.json({ limit: '50mb' }));
 //const {makeconnectionuser,Signupcoll,Corejob,Employerdetail,Applicationcollection,jobschema}=require("../mangoosefile");
-const { stringify } = require('querystring');
+//const { stringify } = require('querystring');
 const storage=multer.memoryStorage();
-var router = express.Router();
+//var router = express.Router();
 const upload=multer({storage:storage});
 var Signupcoll=require("../model/signupcoll");
 var {jobschema,Corejob}=require("../model/jobschemacoll");
 var Applicationcollection=require("../model/appschemacoll");
-const {protect}=require("../middleware/protect");
+//const {protect}=require("../middleware/protect");
 
 
-const index=async(req, res, next)=>{
+const index=async(req, res)=>{
     try {
 
        if(req.cookies.jwt){
@@ -77,10 +76,7 @@ const applicationformsubmit=async (req, res) => {
             companyname: req.body.companyname,
             jobname: req.body.jobname
         });
-        console.log(count);
-        console.log(count);
-        console.log(count);
-        console.log(count);
+    
 
         if (count == 0) {
             const appdoc = new Applicationcollection({
@@ -132,7 +128,7 @@ const applicationformsubmit=async (req, res) => {
 }
 
 
-const signup = async (req, res, next) => {
+const signup = async (req, res) => {
     console.log("this is post method");
     const name1 = req.body.username;
     const email1 = req.body.email;
@@ -167,8 +163,7 @@ const signup = async (req, res, next) => {
         }
     } catch (error) {
         console.error("Error during signup:", error);
- 
-        next(error);
+  next(error);
     }
 };
 
@@ -222,7 +217,7 @@ const searchjob = async (req, res) => {
         
         const { category, role } = req.body;
         if (!category || !role) {
-            return res.status(400).send('Missing category or role in request body');
+            return res.status(400).send('NO category or role  got selected');
         }
 
         console.log(category);
@@ -353,6 +348,26 @@ const about =async(req,res)=>{
     
         
      }
+     const appabout =async(req,res)=>{
+        try{
+            if(req.cookies.jwt)
+            {
+                const verify=jwt.verify(req.cookies.jwt,"thisismyfirstnodejsexpressmongodbproject")
+        console.log("this is verification"+verify);
+        console.log("this is about block");
+        console.log(verify.name)
+        res.render("../views/about.ejs",{user:verify.name});}
+        else{
+            console.log("hii");
+            res.render("../views/signin.ejs",{message:"signin or singup first"});
+            }}
+        catch(error)
+        {
+            console.log(error)
+        }
+        
+            
+         }
 const logout=(req,res)=>{
         res.clearCookie('jwt');
         res.clearCookie('employerjwt'); 
@@ -410,8 +425,8 @@ const userdata=(async(req,res)=>{
                 const transporter=nodemailer.createTransport({
                             service: 'gmail',
                       auth: {
-                        user: '20311a1206@sreenidhi.edu.in',
-                        pass: '20311A1206',
+                        user: process.env.EMAIL,
+                        pass:process.env.EMAILPASSWORD,
                       },
                         })
                         const mailOptions = {

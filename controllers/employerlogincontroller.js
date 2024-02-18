@@ -61,7 +61,7 @@ const employersendotp=async(req,res)=>{
         {  
         const otp1=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
             res.cookie("otp",otp1,{
-                maxAge:1000000,
+                maxAge:10000,
                 httpOnly:true
             });
             const transporter=nodemailer.createTransport({
@@ -237,7 +237,8 @@ const findcandidate=async(req,res)=>{
 
 
    const mypostfindcandidatecompany =async(req,res)=>{
-    try{let cat="any"
+    try{
+      let cat="any"
       let  role="any"
       let documents;
       let status=req.query.status;

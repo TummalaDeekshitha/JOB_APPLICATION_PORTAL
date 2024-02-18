@@ -9,7 +9,7 @@ const otpGenerator = require('otp-generator')
 const cookieParser=require("cookie-parser")
 var Employerdetail=require("../model/employerschemacoll");
 const {adminprotect}=require("../middleware/adminprotect");
-
+var Applicationcollection=require("../model/appschemacoll");
 const verify = async(req,res)=>{
     if(req.cookies.adminjwt)
     {  const decoded = jwt.verify(req.cookies.adminjwt, "thisismyfirstnodejsexpressmongodbproject");
@@ -239,4 +239,56 @@ transporter.sendMail(mailOptions, (error, info) => {
   }
 
 }
-module.exports={verify,adminabout,adminsendotp,adminloginverifyotp,adminloginconfirmpassword,removeemployer,rejectemployer,addemployer}
+const applicationtrendsdocuments=async(req,res)=>{
+  try {
+      const timeRange = req.query.timeRange;
+      let startDate;
+
+      if (timeRange === 'today') {
+          startDate = new Date();
+          startDate.setHours(0, 0, 0, 0);
+      } else if (timeRange === '5days') {
+          startDate = new Date();
+          startDate.setDate(startDate.getDate() - 5);
+      } else if (timeRange === '10days') {
+          startDate = new Date();
+          startDate.setDate(startDate.getDate() - 10);
+      } else if (timeRange === '1month') {
+          startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 1);
+      } else if (timeRange === '2months') {
+          startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 2);
+      } else if (timeRange === '3months') {
+          startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 3);
+      }
+
+      const documents = await Applicationcollection.aggregate([
+          {
+              $match: {
+                  category: req.query.category,
+                  applieddate: { $gte: startDate }
+              }
+          },
+          {
+              $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$applieddate" } },
+                  count: { $sum: 1 }
+              }
+          },
+          {
+              $sort: { _id: 1 }
+          }
+      ]);
+
+      const labels = documents.map(doc => doc._id);
+      const documentCounts = documents.map(doc => doc.count);
+
+      res.json({ labels, documentCounts });
+  } catch (error) {
+      console.error('Error fetching documents:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+module.exports={verify,adminabout,adminsendotp,adminloginverifyotp,adminloginconfirmpassword,removeemployer,rejectemployer,addemployer,applicationtrendsdocuments}

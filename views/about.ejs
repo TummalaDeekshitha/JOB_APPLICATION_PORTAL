@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 
@@ -6,9 +13,6 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- Mobile Metas -->
-    <meta http-equiv='cache-control' content='no-cache'>
-    <meta http-equiv='expires' content='0'>
-    <meta http-equiv='pragma' content='no-cache'>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <!-- Site Metas -->
     <meta name="keywords" content="" />
@@ -26,118 +30,91 @@
     <!-- responsive style -->
     <link href="./css/responsive.css" rel="stylesheet" />
     <style>
-        form {
-            max-width: 600px;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+       form {
+    max-width: 600px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.card {
+    width: 30%;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.backcolor {
+    background-color: #ff8300;
+}
+
+.greencolor {
+    background-color: darkslategrey;
+}
+
+form button {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Updated logout button style */
+.logout-btn {
+    background-color: #ff8300;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #e25f00;
+}
+.about-btn:hover {
+    background-color: #e25f00;
+}
+.chat-btn:hover {
+    background-color: #e25f00;
+}
+        @media (max-width: 768px) {
+            .card-container {
+                flex-direction: column;
+            }
+
+            .card {
+                width: 100%;
+                margin-bottom: 20px;
+            }
         }
 
-        .card-container {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px;
-        }
-
-        .card {
-            width: 30%;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        form select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
-
-        .backcolor {
-            background-color: #ff8300;
-        }
-
-        .greencolor {
-            background-color: darkslategrey;
-        }
-
-        form button {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* Updated logout button style */
-        .logout-btn {
-            background-color: #ff8300;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #e25f00;
-        }
-        .about-btn:hover {
-            background-color: #e25f00;
-        }
-        .chat-btn:hover {
-            background-color: #e25f00;
+        @media (max-width: 576px) {
+            form {
+                max-width: 90%;
+            }
         }
     </style>
-    <script>
-        async function updateField2Options() {
-            var categorySelect = document.getElementById('category');
-            var field2Select = document.getElementById('field2');
-
-            // Enable the second dropdown
-            field2Select.disabled = false;
-            const cat = categorySelect.value;
-            // Clear existing options
-            field2Select.innerHTML = '<option value="" disabled selected>Job Name</option>';
-            await fetch(`/${cat}sapi`).then((res) => {
-                return res.json();
-            }).then((data) => {
-                const arr = new Array();
-                let arraymap;
-                const currentDate = new Date();
-                arraymap = data.map((val, i, arr) => {
-                    if (data[i].openings > 0 && new Date(data[i].lastdate).getTime() >= currentDate.getTime()) {
-                        if (!arr.includes(data[i].jobname)) {
-                            field2Select.innerHTML += `<option value=${data[i].jobname} name=${data[i].jobname}>${data[i].jobname}</option>`;
-                            arr.push(data[i].jobname);
-                        }
-
-                    }
-                })
-            });
-            // Populate options based on the selected category
-            // if (categorySelect.value === 'governmentjobs') {
-            //     field2Select.innerHTML += '<option value="VRO" name="VRO">VRO</option>';
-            //     field2Select.innerHTML += '<option value="MRO" name="MRO">MRO</option>';
-            // } 
-            // else if (categorySelect.value === 'softwarejobs') {
-            //     field2Select.innerHTML += '<option value="productdeveloper" name="productdeveloper">productdeveloper</option>';
-            //     field2Select.innerHTML += '<option value="tester" name="tester">tester</option>';
-            // } 
-            // else if (categorySelect.value === 'corejobsjobs') {
-            //     field2Select.innerHTML += '<option value="electronic" name="electronic">electronic</option>';
-            //     field2Select.innerHTML += '<option value="electrical" name="electrical">electrical</option>';
-            // }
-        }
-
-
-    </script>
 </head>
 
 <body class="sub_page">
@@ -159,9 +136,6 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav  ">
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" href="index.ejs">Home <span class="sr-only">(current)</span></a>
-                            </li> -->
                             <li class="nav-item active">
                                 <a class="nav-link chat-btn" href="/catapp">
                                      <i class="fas fa-users "></i> Collaboration Room
@@ -214,8 +188,6 @@
                 </div>
 
                 <div class="card-container">
-
-
                     <div class="card">
                         <h3>Software Jobs</h3>
                         <p>Find exciting opportunities in the software industry.</p>
@@ -233,10 +205,6 @@
                         <a href="/viewapplications" class="btn btn-info">View Applications</a>
                     </div>
                 </div>
-
-
-
-
             </div>
         </div>
     </section>
@@ -246,18 +214,12 @@
     <form class="bg-light p-4" action="/searchjob" method="post">
         <select class="form-control" name="category" id="category" onchange="updateField2Options()">
             <option value="" disabled selected>Select Category</option>
-            <!-- <option value="governmentjob">government</option> -->
-            <option value="softwarejob">software</option>
-            <option value="corejob">corejobs</option>
-            <!-- Add more options as needed -->
+            <option value="softwarejob">Software</option>
+            <option value="corejob">Core Jobs</option>
         </select>
 
-
-
         <select class="form-control" name="role" id="field2" disabled>
-
-
-            <!-- Add more options as needed -->
+            <!-- Options will be populated dynamically -->
         </select>
 
         <button type="submit" class="btn btn-success">Search</button>
@@ -296,8 +258,34 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/custom.js"></script>
 
+    <script>
+        async function updateField2Options() {
+            var categorySelect = document.getElementById('category');
+            var field2Select = document.getElementById('field2');
 
+            // Enable the second dropdown
+            field2Select.disabled = false;
+            const cat = categorySelect.value;
+            // Clear existing options
+            field2Select.innerHTML = '<option value="" disabled selected>Select Job Name</option>';
+            await fetch(`/${cat}sapi`).then((res) => {
+                return res.json();
+            }).then((data) => {
+                const arr = new Array();
+                let arraymap;
+                const currentDate = new Date();
+                arraymap = data.map((val, i, arr) => {
+                    if (data[i].openings > 0 && new Date(data[i].lastdate).getTime() >= currentDate.getTime()) {
+                        if (!arr.includes(data[i].jobname)) {
+                            field2Select.innerHTML += `<option value=${data[i].jobname} name=${data[i].jobname}>${data[i].jobname}</option>`;
+                            arr.push(data[i].jobname);
+                        }
 
+                    }
+                })
+            });
+        }
+    </script>
 </body>
 
 </html>

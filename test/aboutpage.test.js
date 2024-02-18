@@ -74,7 +74,6 @@ describe('aboutpage function', () => {
     });
 
     it('should render "signin.ejs" with message "you don\'t have account" if email does not exist', async () => {
-        
         const req = {
             body: {
                 email1: 'nonexistent@example.com',

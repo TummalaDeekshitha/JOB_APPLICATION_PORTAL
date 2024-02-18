@@ -10,7 +10,7 @@ totalapplications: {type:Number,
 openings:{type:Number,
   required:true},
   lastdate: {
-    type: Date, // Use Date type for date fields
+    type: Date, 
     required: true},
  description:{
     type:String,

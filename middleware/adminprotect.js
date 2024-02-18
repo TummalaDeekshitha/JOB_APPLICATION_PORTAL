@@ -11,11 +11,11 @@ const adminprotect = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, "thisismyfirstnodejsexpressmongodbproject");
-    // console.log(decoded);
+   
     if (decoded?._id == null) {
       return res.render("../views/adminlogin.ejs");;
     }
-    // console.log(token); 
+   
     console.log(decoded.name);
     req.myusername = await decoded.name;
     req.myemail=await decoded.email

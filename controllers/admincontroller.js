@@ -40,7 +40,7 @@ const verify = async(req,res)=>{
         
         console.log(resultdoc);
         res.render('../views/adminabout.ejs',{user:result.name,employerDetails:resultdoc});
-    }
+    } 
     else{
         res.render('../views/adminlogin.ejs',{message:"credentials error"})
     }

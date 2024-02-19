@@ -16,3 +16,21 @@ Utilized as the server-side runtime environment.
 Implemented to build robust and scalable web applications.
 ### MongoDB: 
 Employed as the database to store and manage job listings, user data, and application details.
+## Features
+### User-Friendly Interface:
+JobForge boasts an intuitive and visually appealing user interface, providing a seamless experience for both job seekers and employers.
+
+### Secure Authentication:
+User authentication is implemented to ensure secure access to the portal, with user data stored securely in MongoDB.
+Installation and Usage
+## Prerequisites:
+Node.js and npm should be installed on your machine.
+MongoDB should be installed and running.
+## Steps:
+1. Clone the repository from GitHub.
+2. Navigate to the project directory.
+3. Install dependencies using npm install.
+4. Start the server using npm start.
+5. Access the application through your web browser.
+## Conclusion
+JobForge offers a robust solution for job seekers and employers, providing an efficient platform for job applications and postings. With its user-friendly interface and secure authentication, JobForge aims to simplify the job search process for users while meeting the needs of employers

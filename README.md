@@ -34,3 +34,19 @@ MongoDB should be installed and running.
 5. Access the application through your web browser.
 ## Conclusion
 JobForge offers a robust solution for job seekers and employers, providing an efficient platform for job applications and postings. With its user-friendly interface and secure authentication, JobForge aims to simplify the job search process for users while meeting the needs of employers
+## To run the application
+1. Create a .env file with the following:  (Replace the text in "" with actual values)
+   - USERNAME="mongodbaccount username"
+   - PASSWORD="password"
+   - URL = "mongodbatlas url"
+   - ACCESSKEY="access key of s3 bucket"
+   - SECRETACESSKEY="secretaccesskey of bucket" 
+   - BUCKETNAME="bucketname"
+   - REGION="region"
+   - EMAILPASSWORD="email password"
+   - EMAIL="email "
+   - ADMINEMAIL="admin email"
+2. Have Node setup on your system
+3. ``` npm install ```
+4. ``` npm start ```
+5. Open http://localhost:6557 on your browser

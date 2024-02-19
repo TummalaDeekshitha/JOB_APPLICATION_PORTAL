@@ -24,7 +24,7 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 app.use(express.json({ limit: '50mb' }));
 
-var connectDB = require("./mangoosefile.js");
+var {connectDB}= require("./mangoosefile.js");
 const { stringify } = require('querystring');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

@@ -28,6 +28,48 @@ var {jobschema,Corejob,Softwarejob}=require("../model/jobschemacoll");
 var Applicationcollection=require("../model/appschemacoll");
 var Employerdetail=require("../model/employerschemacoll");
 
+const employerlogin=async(req,res)=>{
+    
+    
+  const email2=req.body.email1;
+  const pass1=req.body.password1;
+  const result =await Employerdetail.findOne({email:email2,eligible:true})
+  const result1=await Employerdetail.countDocuments({email:email2,eligible:true})
+  //const resultn=await db1.find({});
+  try{
+  if(result1)
+  {  
+  const result2 = await bcrypt.compare(pass1, result.pass);
+  const token= result.tokens[0].token;
+  console.log(token)
+  if(result2>0)
+  {
+      res.cookie("employerjwt",token,{
+          maxAge:10000000,
+          httpOnly:true
+      });
+      res.render('../views/employerabout.ejs',{user:result.name});
+  }
+  else{
+      console.log(email2);
+      console.log(pass1);
+      console.log(result2);
+      console.log(result1);
+      res.render('../views/employerlogin.ejs',{message:"wrong password"});
+  } 
+  }
+  else{
+      //console.log(resultn);
+      console.log(email2);
+      console.log(result1);
+      res.render('../views/employerlogin.ejs',{message:"you don't have account"});
+  }}
+  catch (error) {
+      console.error('Error comparing passwords:', error);
+    }
+  
+  
+}
 
 const employerloginhandler=async(req,res)=>{
     
@@ -587,47 +629,5 @@ const removepost=async(req,res)=>
 
 }
 
-  const employerlogin=async(req,res)=>{
-    
-    
-    const email2=req.body.email1;
-    const pass1=req.body.password1;
-    const result =await Employerdetail.findOne({email:email2,eligible:true})
-    const result1=await Employerdetail.countDocuments({email:email2,eligible:true})
-    //const resultn=await db1.find({});
-    try{
-    if(result1)
-    {  
-    const result2 = await bcrypt.compare(pass1, result.pass);
-    const token= result.tokens[0].token;
-    console.log(token)
-    if(result2>0)
-    {
-        res.cookie("employerjwt",token,{
-            maxAge:10000000,
-            httpOnly:true
-        });
-        res.render('../views/employerabout.ejs',{user:result.name});
-    }
-    else{
-        console.log(email2);
-        console.log(pass1);
-        console.log(result2);
-        console.log(result1);
-        res.render('../views/employerlogin.ejs',{message:"wrong password"});
-    } 
-    }
-    else{
-        //console.log(resultn);
-        console.log(email2);
-        console.log(result1);
-        res.render('../views/employerlogin.ejs',{message:"you don't have account"});
-    }}
-    catch (error) {
-        console.error('Error comparing passwords:', error);
-      }
-    
-    
-}
-
+  
 module.exports={removepost,employerlogin,employerloginhandler,employersendotp,employerloginverifyotp,employerloginconfirmpassword,findcandidate,findcandidatecompany,mypostfindcandidatecompany,getDocuments,getDocumentscompany,getCompanySuggestions,viewResumelink,sendmail,submitmail,jobpost,postjob,viewyourposts}

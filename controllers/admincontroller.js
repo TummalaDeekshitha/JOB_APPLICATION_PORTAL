@@ -17,6 +17,7 @@ const verify = async(req,res)=>{
       res.render("../views/adminabout.ejs",{employerDetails:resultdoc,user:decoded.name});
     }
     else{
+      
       res.render("../views/adminlogin.ejs",{message:"login here"});
     }
   }

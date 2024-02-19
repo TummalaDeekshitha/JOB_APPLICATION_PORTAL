@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Application</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-bQN6E3LZ+bD/NNADhUKFOqCmFql2gj6D66ObSE4XTX7GrWd17TNnxa+1OxDL0v3/qy6BRX2M0kKxI7jIVq3G6g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -144,7 +144,7 @@
     <div class="container1">
         <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <img src="./images/logo.png" class="logo" alt="Logo">
+                <img src="/images/logo.png" class="logo" alt="Logo">
                 <span class="navbar-brand mb-0 h1">JobForge</span>
                 <span id="usernameDisplay" class="ml-auto navbar-brand mb-0 h1"></span>
                 <img src="/images/icons8-test-account-96.png" class="logo" alt="Profile Logo">
@@ -168,7 +168,7 @@
             </div>
         </div>
         <a href="/employerlogin/employerloginhandler" class="btn btn-danger btn-block mt-3" id="endChatBtn">
-            <i class="fas fa-sign-out-alt mr-2"></i> Exit Chat
+             Exit Chat
         </a>
 
     </div>
@@ -197,7 +197,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-         const socket = io('http://localhost:6557');
+        const socket = io('');
         const messageInput = document.getElementById('messageInp');
         const messageContainer = document.getElementById('messageContainer');
         const usernameDisplay = document.getElementById('usernameDisplay');
@@ -208,10 +208,7 @@
             messageElement.innerText = message;
             messageElement.classList.add('message', position);
             messageContainer.appendChild(messageElement);
-            if (position === 'left') {
-                const audio = new Audio('../notification.mp3'); // Replace with the correct path
-                audio.play();
-            }
+            
             // Scroll to bottom
             messageContainer.scrollTop = messageContainer.scrollHeight;
         };

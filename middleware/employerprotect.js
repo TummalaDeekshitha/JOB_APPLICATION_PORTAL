@@ -13,7 +13,7 @@ const employerprotect = asyncHandler(async (req, res, next) => {
     const decoded = jwt.verify(token, "thisismyfirstnodejsexpressmongodbproject");
     
     if (decoded?._id == null) {
-       res.render("../views/employerlogin.ejs",{message:""});;
+      return res.status(403).send({ success: false, message: "Bad Request" });
     }
     
     console.log(decoded.name);

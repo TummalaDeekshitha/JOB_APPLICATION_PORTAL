@@ -102,7 +102,6 @@ const registeremployer=async(req,res)=>{
 const resendotp= (req,res)=>{
     let email1=req.query.email;
     console.log(email1)
-        
         try{
         const otp1=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
             res.cookie("otp",otp1,{

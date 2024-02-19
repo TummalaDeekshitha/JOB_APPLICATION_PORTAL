@@ -152,16 +152,16 @@
         </nav>
 
         <div class="container" id="messageContainer" style="display: none;">
-            <!-- Message container -->
+            
         </div>
         <div id="send-container">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-9"> <!-- Adjusted column width -->
+                    <div class="col-sm-9"> 
                         <input type="text" name="messageInp" id="messageInp" class="form-control"
                             placeholder="Type your message">
                     </div>
-                    <div class="col-sm-3"> <!-- Adjusted column width -->
+                    <div class="col-sm-3"> 
                         <button class="btn btn-primary btn-block" type="submit" id="sendBtn">Send</button>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
 
     </div>
 
-    <!-- Modal HTML -->
+    
     <div id="myModal" class="modal">
         <div class="modal-content">
             <div class="row">
@@ -191,7 +191,7 @@
     </div>
 
 
-    <!-- Bootstrap JS and Socket.io -->
+   
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -209,26 +209,18 @@
             messageElement.classList.add('message', position);
             messageContainer.appendChild(messageElement);
             if (position === 'left') {
-                const audio = new Audio('../notification.mp3'); // Replace with the correct path
+                const audio = new Audio('../notification.mp3'); 
                 audio.play();
             }
-            // Scroll to bottom
+           
             messageContainer.scrollTop = messageContainer.scrollHeight;
         };
 
-        document.getElementById('sendBtn').addEventListener('click', () => {
-            const message = messageInput.value.trim();
-            if (message !== '') {
-                appendMessage(`You: ${message}`, 'right');
-                socket.emit("send", message);
-                messageInput.value = "";
-            }
-        });
-
-        document.getElementById('aboutBtn').addEventListener('click', () => {
-            // Redirect to the about section or perform any other desired action
-            window.location.href = "#about";
-        });
+        
+        // document.getElementById('aboutBtn').addEventListener('click', () => {
+           
+        //     window.location.href = "#about";
+        // });
 
         document.getElementById('joinChat').addEventListener('click', () => {
             const username = document.getElementById('username').value;
@@ -247,8 +239,16 @@
 
             modal.style.display = "none";
 
-            // Display the message container
+            
             messageContainer.style.display = "block";
+        });
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                appendMessage(`You: ${message}`, 'right');
+                socket.emit("send", message);
+                messageInput.value = "";
+            }
         });
 
         socket.on('receive', (data) => {

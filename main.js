@@ -47,10 +47,8 @@ app.get('/images/:key', (req, res) => {
     const readstream = getfilestream(key);
     readstream.pipe(res);
 });
-
 app.get('/socket.io/socket.io.js', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'node_modules', 'socket.io', 'client-dist', 'socket.io.js'), {
-        // Set the appropriate Content-Type header
         headers: {
             'Content-Type': 'application/javascript'
         }

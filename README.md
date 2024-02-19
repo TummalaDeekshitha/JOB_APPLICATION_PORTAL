@@ -37,3 +37,4 @@ Start the server using npm start.
 Access the application through your web browser.
 Conclusion
 JobForge offers a robust solution for job seekers and employers, providing an efficient platform for job applications and postings. With its user-friendly interface and secure authentication, JobForge aims to simplify the job search process for users while meeting the needs of employers
+

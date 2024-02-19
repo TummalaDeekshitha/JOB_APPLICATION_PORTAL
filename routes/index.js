@@ -67,20 +67,6 @@ router.post("/confirmpassword",confirmpassword)
 router.get("/applicationsearch",applicationsearch)
 router.get("/viewapplications",protect,viewapplications)
 router.get("/corejobsapi",corejobsapi)
-// router.get("/governmentjobsapi",(async(req,res)=>{
-//     console.log("hiiiiiiiiiii");
-//     const Collectionjob=mongoose.model("governmentjobs",jobschema);
-//     try{
-//         let p = await Collectionjob.find();
-//         console.log(p);
-//         res.json(p);
-//     }
-//     catch(error)
-//     {
-//         console.log(error);
-//     }
-   
-// }))
 router.get("/graphcompany",(req,res)=>{
     res.render("../views/companygraph.ejs")
 })
@@ -118,7 +104,7 @@ router.get("/applicationdocument", async (req, res) => {
             },
             {
                 $group: {
-                    _id: { $toLower: '$companyname' }, // Convert companyname to lowercase
+                    _id: { $toLower: '$companyname' }, 
                     count: { $sum: 1 }
                 }
             }

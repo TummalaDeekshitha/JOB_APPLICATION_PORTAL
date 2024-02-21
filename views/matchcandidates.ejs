@@ -201,14 +201,12 @@ a:hover{
     .then(response => response.json())
     .then(suggestions => {
       if (query === '' || suggestions.length === 0) {
-        // If input is empty or no suggestions, do not display suggestions
         return;
       }
 
       var arr = [];
 
       suggestions.forEach(suggestion => {
-        // Check if the suggestion is not in the array before adding it
         if (!arr.includes(suggestion)) {
           const listItem = document.createElement('li');
           listItem.textContent = suggestion;
@@ -245,7 +243,7 @@ a:hover{
 
           documents.forEach(doc => {
             const row = tableBody.insertRow();
-
+      
             const nameCell = row.insertCell(0);
             nameCell.textContent = doc.name;
 

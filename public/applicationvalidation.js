@@ -8,12 +8,14 @@
             
             if (name.trim() === '') {
                 alert('Please enter your Full Name.');
+                event.preventDefault();
                  return false;
             }
 
             
             var nameRegex = /^[A-Za-z]+$/;
             if (!nameRegex.test(name)) {
+                event.preventDefault();
                 alert('Full Name should contain only alphabets.');
                return false
             }
@@ -22,6 +24,7 @@
             var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Please enter a valid email address.');
+                event.preventDefault();
                return false
             }
 
@@ -29,12 +32,14 @@
             var phoneRegex = /^\d{10}$/; 
             if (!phoneRegex.test(phone)) {
                 alert('Please enter a valid 10-digit phone number.');
+                event.preventDefault();
                return false
             }
 
            
             if (coverLetter.trim() === '') {
                 alert('Please enter your Cover Letter.');
+                event.preventDefault();
                 return false
             }
 

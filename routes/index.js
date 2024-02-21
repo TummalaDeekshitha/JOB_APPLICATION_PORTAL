@@ -1,27 +1,8 @@
-// const bcrypt = require('bcrypt');
- const express=require("express");
-// const path=require("path");
-// const app=express();
 
-// const session = require("express-session");
-// const otpGenerator = require('otp-generator')
+ const express=require("express");
  const multer=require("multer");
-// const nodemailer=require("nodemailer")
-// app.use(express.static(path.join(__dirname,"public")));
-// app.set("view engine", "ejs");
-// app.set("views", path.join(__dirname, "views"));
 
 const mongoose=require("mongoose");
-// const { error } = require("console");
-// const grid = require('gridfs-stream');
-// app.use(express.urlencoded({ extended: false ,limit: '50mb'}));
-// // app.use(express.static(path.join(__dirname,"public")));
-// const jwt=require("jsonwebtoken")
-// const cookieParser=require("cookie-parser")
-// app.use(cookieParser())
-// app.use(express.json({ limit: '50mb' }));
-// //const {makeconnectionuser,Signupcoll,Corejob,Employerdetail,Applicationcollection,jobschema}=require("../mangoosefile");
-// const { stringify } = require('querystring');
  const storage=multer.memoryStorage();
  var router = express.Router();
  const upload=multer({storage:storage});
@@ -30,21 +11,7 @@ const mongoose=require("mongoose");
  var Applicationcollection=require("../model/appschemacoll");
 const {protect}=require("../middleware/protect");
 const {index,applicationformsubmit,signup,aboutpage,searchjob,jobs,searchindexjob,about,logout,signinhandle,userdata,sendotp,verifyotp,confirmpassword,applicationsearch,viewapplications,corejobsapi,softwarejobsapi}=require("../controllers/indexcontroller.js");
-
 router.get('/',index)
-// router.get("/universalapplicationform",(req,res)=>{
-//     try{
-
-//        const category=req.query.category;
-//        const job=req.query.jobname;
-//        const company=req.query.companyname;
-//        res.render(`../views/universalapplicationform.ejs?company=${company}&job=${job}&category=${category}`)
-//     }
-//     catch(error)
-//     {
-//         console.log(error)
-//     }
-// })
 router.get("/signuphandle",(req,res)=>{
     res.render("signup.ejs",{message:""});
 })

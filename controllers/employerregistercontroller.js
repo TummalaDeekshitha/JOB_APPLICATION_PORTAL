@@ -1,9 +1,8 @@
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const express=require("express");
-const path=require("path");
+// const path=require("path");
 const app=express();
-
-const session = require("express-session");
+require('dotenv').config();
 const otpGenerator = require('otp-generator')
 const nodemailer=require("nodemailer")
 const mongoose=require("mongoose");
@@ -44,7 +43,7 @@ const registeremployer=async(req,res)=>{
 
       }
       else{
-    const subject=` i wants to the upload the job posts using your application  my details ${req.body.email},${req.body.aadharnumber},${req.body.employeridnumber},${req.body.companyname},${req.body.industry}`
+    const subject=` so and so person wants to post in your portal   details ${req.body.email},${req.body.aadharnumber},${req.body.employeridnumber},${req.body.companyname},${req.body.industry}`
         const transporter=nodemailer.createTransport({
                     service: 'gmail',
               auth: {
@@ -111,12 +110,12 @@ const resendotp= (req,res)=>{
             const transporter=nodemailer.createTransport({
                         service: 'gmail',
                   auth: {
-                    user: '20311a1206@sreenidhi.edu.in',
-                    pass: '20311A1206',
+                    user: process.env.EMAIL,
+                    pass: process.env.EMAILPASSWORD,
                   },
                     })
                     const mailOptions = {
-                        from: '20311a1206@sreenidhi.edu.in',
+                        from: process.env.EMAIL,
                         to: email1,
                         subject: 'JobForger',
                         text: `your OTP : ${otp1}\n `,

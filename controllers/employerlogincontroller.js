@@ -1,29 +1,16 @@
 const bcrypt = require('bcrypt');
 const express=require("express");
-const path=require("path");
+
 const app=express();
-const session = require("express-session");
 const otpGenerator = require('otp-generator')
 const multer=require("multer");
 const nodemailer=require("nodemailer")
 const mongoose=require("mongoose");
-const { error } = require("console");
-const grid = require('gridfs-stream');
 require('dotenv').config();
-const  username=process.env.USERNAME
-// app.use(express.urlencoded({ extended: false ,limit: '50mb'}));
-// app.use(express.static(path.join(__dirname,"public")));
 const jwt=require("jsonwebtoken")
 const cookieParser=require("cookie-parser")
 const bodyParser = require('body-parser');
-// app.use(cookieParser())
-// app.use(express.json({ limit: '50mb' }));
-const { stringify } = require('querystring');
-var router = express.Router();
-const storage=multer.memoryStorage();
-const upload=multer({storage:storage});
 app.use(bodyParser.urlencoded({ extended: true }));
-const {employerprotect}=require("../middleware/employerprotect");
 var {jobschema,Corejob,Softwarejob}=require("../model/jobschemacoll");
 var Applicationcollection=require("../model/appschemacoll");
 var Employerdetail=require("../model/employerschemacoll");
@@ -45,7 +32,7 @@ const employerlogin=async(req,res)=>{
   if(result2>0)
   {
       res.cookie("employerjwt",token,{
-          maxAge:10000000,
+          maxAge:100000,
           httpOnly:true
       });
       res.render('../views/employerabout.ejs',{user:result.name});
@@ -218,7 +205,6 @@ const findcandidate=async(req,res)=>{
            documents=await Applicationcollection.find({companyname:company,status:`${status}`});
         }
       }
-
     const count=documents.length;
     const limit=10;
     let r=count%10;
@@ -582,8 +568,7 @@ const submitmail=(req,res)=>{
     console.log(req.file);
     let Samplemodel=mongoose.model(`${req.body.category}s`,jobschema);
     let doc=new Samplemodel({
-         
-        companyname:req.body.companyname,
+         companyname:req.body.companyname,
         jobname:req.body.jobname,
         totalapplications:req.body.openings,
        openings: req.body.openings,
@@ -614,9 +599,7 @@ const viewyourposts=async(req,res)=>{
     else{
       res.render("../views/employerlogin.ejs",{message:"session time out"})
     }
-  
-  
-  }
+ }
 const removepost=async(req,res)=>
 {
     const cat =req.query.category;

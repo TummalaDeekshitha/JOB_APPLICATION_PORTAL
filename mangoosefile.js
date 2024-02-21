@@ -21,15 +21,15 @@ const connectDB = async() => {
             process.exit(1);
         });
  
-    const dbConnection = mongoose.connection;
+    // const dbConnection = mongoose.connection;
  
-    await dbConnection.on("error", (err) => {
-        console.error(`Error connecting to DB: ${err}`);
-    });
+    // await dbConnection.on("error", (err) => {
+    //     console.error(`Error connecting to DB: ${err}`);
+    // });
  
-    dbConnection.once("open", () => {
-        console.log(`Connected to DB: ${url}`);
-    });
+    // dbConnection.once("open", () => {
+    //     console.log(`Connected to DB: ${url}`);
+    // });
 };
 module.exports = { connectDB };
 

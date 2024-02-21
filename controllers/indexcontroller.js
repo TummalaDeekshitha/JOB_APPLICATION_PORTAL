@@ -62,7 +62,24 @@ const index=async(req, res)=>{
        
    }
 }
-
+const  signinhandle=async(req,res)=>{
+    
+    try{
+        if(req.cookies.jwt)
+        {
+        const verify=jwt.verify(req.cookies.jwt,"thisismyfirstnodejsexpressmongodbproject")
+    console.log("this is verification"+verify);
+    console.log("this is about block");
+    console.log(verify.user);
+    res.render("../views/about.ejs",{user:verify.name})}
+    else{
+        console.log("hii");
+        res.render("../views/signin.ejs",{message:"signin or singup first"});
+        }}
+    catch(error)
+    {
+        console.log(error)
+    }}
 const applicationformsubmit=async (req, res) => {
     try {
         console.log(req.body);
@@ -264,7 +281,7 @@ const searchindexjob =async(req,res)=>{
             {
               $match: {
                 openings: { $gt: 0 },
-                //lastdate: { $gte: new Date() }
+                lastdate: { $gte: new Date() }
               }
             }
           ]);
@@ -375,24 +392,7 @@ const logout=(req,res)=>{
        
         res.render('../views/index.ejs'); 
      }
-const  signinhandle=async(req,res)=>{
-    
-        try{
-            if(req.cookies.jwt)
-            {
-            const verify=jwt.verify(req.cookies.jwt,"thisismyfirstnodejsexpressmongodbproject")
-        console.log("this is verification"+verify);
-        console.log("this is about block");
-        console.log(verify.user);
-        res.render("../views/about.ejs",{user:verify.name})}
-        else{
-            console.log("hii");
-            res.render("../views/signin.ejs",{message:"signin or singup first"});
-            }}
-        catch(error)
-        {
-            console.log(error)
-        }}
+
 
 const userdata=(async(req,res)=>{
             console.log("hiiiiiiiiiii");
@@ -419,7 +419,7 @@ const userdata=(async(req,res)=>{
             
             const otp1=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
                 res.cookie("otp",otp1,{
-                    maxAge:10000000,
+                    maxAge:60000,
                     httpOnly:true
                 });
                 const transporter=nodemailer.createTransport({

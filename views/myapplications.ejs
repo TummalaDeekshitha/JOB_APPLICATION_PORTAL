@@ -65,7 +65,7 @@ nav a {
             align-items: center;
         }
         .applied {
-            background-color: #ffe6e6;
+            background-color: rgb(170, 215, 245);
         }
 
         .approved {
@@ -95,12 +95,12 @@ nav a {
     <% applications.forEach(application => { %>
         <div class="card mb-3 <%= application.status === 'approved' ? 'approved' : 'applied' %>">
             <div class="row g-0">
-                <%if (application.logo?.data){%>
+                <!-- <%if (application.logo?.data){%>
                     <div class="col-md-2" >
                      
                         <img src="data:image/jpeg;base64,<%= application.logo.data.toString('base64') %>" alt="Company Logo" class="card-img-top"/>
                     </div>
-                    <% } %>
+                    <% } %> -->
                 <div class="col-md-10">
                     <div class="card-body">
                         <h5 class="card-title"><%= application.jobname %> at <%= application.companyname %></h5>
@@ -111,7 +111,7 @@ nav a {
                         <% if (application.status === 'approved') { %>
                             <p class="card-text text-success">Approved</p>
                         <% } else { %>
-                            <p class="card-text text-info">Applied</p>
+                            <p class="card-text text-primary">Applied</p>
                         <% } %>
                     </div>
                 </div>

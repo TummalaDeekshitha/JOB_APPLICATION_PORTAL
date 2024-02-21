@@ -5,9 +5,9 @@ const jobschema=new mongoose.Schema({
     jobname:{type:String,
         required:true},
 
-totalapplications: {type:Number,
+ totalapplications: {type:Number,
         required:true},
-openings:{type:Number,
+  openings:{type:Number,
   required:true},
   lastdate: {
     type: Date, 

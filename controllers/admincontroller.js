@@ -1,14 +1,15 @@
 const express=require("express");
 const bcrypt = require('bcrypt');
 var router = express.Router();
-const session = require("express-session");
-const multer=require("multer");
+require('dotenv').config();
+// const session = require("express-session");
+// const multer=require("multer");
 const nodemailer=require("nodemailer")
 const jwt=require("jsonwebtoken")
 const otpGenerator = require('otp-generator')
-const cookieParser=require("cookie-parser")
+// const cookieParser=require("cookie-parser")
 var Employerdetail=require("../model/employerschemacoll");
-const {adminprotect}=require("../middleware/adminprotect");
+// const {adminprotect}=require("../middleware/adminprotect");
 var Applicationcollection=require("../model/appschemacoll");
 const verify = async(req,res)=>{
     if(req.cookies.adminjwt)
@@ -68,8 +69,8 @@ const adminsendotp=async(req,res)=>{
       const transporter=nodemailer.createTransport({
                   service: 'gmail',
             auth: {
-              user: '20311a1206@sreenidhi.edu.in',
-              pass: '20311A1206',
+              user: process.env.EMAIL,
+                    pass: process.env.EMAILPASSWORD,
             },
               })
               const mailOptions = {
@@ -136,12 +137,12 @@ const removeemployer=async(req,res)=>{
   const transporter=nodemailer.createTransport({
       service: 'gmail',
 auth: {
-  user: '20311a1206@sreenidhi.edu.in',
-  pass: '20311A1206',
+  user: process.env.EMAIL,
+  pass: process.env.EMAILPASSWORD,
 },
   })
   const mailOptions = {
-      from: '20311a1206@sreenidhi.edu.in',
+      from:  process.env.EMAIL,
       to: mail,
       subject: 'JobForger',
       text: `your permissions to post the job in JobForge is removed`,
@@ -174,12 +175,12 @@ const rejectemployer=async(req,res)=>{
   const transporter=nodemailer.createTransport({
       service: 'gmail',
 auth: {
-  user: '20311a1206@sreenidhi.edu.in',
-  pass: '20311A1206',
+  user:  process.env.EMAIL,
+  pass:process.env.EMAILPASSWORD,
 },
   })
   const mailOptions = {
-      from: '20311a1206@sreenidhi.edu.in',
+      from: process.env.EMAIL,
       to: mail,
       subject: 'JobForger',
       text: `your account got permenantly removed from the JobForge`,
@@ -210,12 +211,12 @@ const addemployer= async(req,res)=>{
   const transporter=nodemailer.createTransport({
       service: 'gmail',
 auth: {
-  user: '20311a1206@sreenidhi.edu.in',
-  pass: '20311A1206',
+ user:  process.env.EMAIL,
+  pass:process.env.EMAILPASSWORD,
 },
   })
   const mailOptions = {
-      from: '20311a1206@sreenidhi.edu.in',
+     from: process.env.EMAIL,
       to: mail,
       subject: 'JobForger',
       text: `Hurray now your account got approved, now you can upload your job posts in the JobForge `,

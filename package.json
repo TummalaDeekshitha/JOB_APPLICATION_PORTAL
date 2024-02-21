@@ -6,7 +6,7 @@
   "scripts": {
     "coverage": "nyc npm run test",
     "test": "mocha test/*.test.js",
-    "custom-test": "mocha test/signup.test.js",
+    "custom-test": "mocha test/mongoose.test.js",
     "start": "nodemon node main.js"
   },
   "author": "",

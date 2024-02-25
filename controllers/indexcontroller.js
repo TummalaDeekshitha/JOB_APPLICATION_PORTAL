@@ -11,16 +11,14 @@ app.use(express.static(path.join(__dirname,"public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 const mongoose=require("mongoose");
-//const { error } = require("console");
-//const grid = require('gridfs-stream');
+
 app.use(express.urlencoded({ extended: false ,limit: '50mb'}));
 // app.use(express.static(path.join(__dirname,"public")));
 const jwt=require("jsonwebtoken")
 const cookieParser=require("cookie-parser")
 app.use(cookieParser())
 app.use(express.json({ limit: '50mb' }));
-//const {makeconnectionuser,Signupcoll,Corejob,Employerdetail,Applicationcollection,jobschema}=require("../mangoosefile");
-//const { stringify } = require('querystring');
+
 const storage=multer.memoryStorage();
 //var router = express.Router();
 const upload=multer({storage:storage});
@@ -46,13 +44,7 @@ const index=async(req, res)=>{
        console.log("Verification successful: ", verify);
        res.render("../views/employerabout.ejs",{user:verify.name});
        }
-    //    else if(req.cookies.adminjwt)
-    //    {
-    //        console.log(req.cookies.adminjwt);
-    //    const verify = jwt.verify(req.cookies.adminjwt, "thisismyfirstnodejsexpressmongodbproject");
-    //    console.log("Verification successful: ", verify);
-    //    res.render("../views/adminabout.ejs",{user:verify.myusername}); 
-    //    }
+    
        else{
           
        res.render("../views/index.ejs");
@@ -145,7 +137,7 @@ const applicationformsubmit=async (req, res) => {
 }
 
 
-const signup = async (req, res) => {
+const signup = async (req, res,next) => {
     console.log("this is post method");
     const name1 = req.body.username;
     const email1 = req.body.email;
@@ -275,7 +267,7 @@ const searchindexjob =async(req,res)=>{
     console.log(category);
     console.log(query);
     let doc;
-    if (query.trim() === '') {
+    if (query && query.trim() === '') {
         const Collectionjob=mongoose.model(category,jobschema);
         doc = await Collectionjob.aggregate([
             {
@@ -365,26 +357,26 @@ const about =async(req,res)=>{
     
         
      }
-     const appabout =async(req,res)=>{
-        try{
-            if(req.cookies.jwt)
-            {
-                const verify=jwt.verify(req.cookies.jwt,"thisismyfirstnodejsexpressmongodbproject")
-        console.log("this is verification"+verify);
-        console.log("this is about block");
-        console.log(verify.name)
-        res.render("../views/about.ejs",{user:verify.name});}
-        else{
-            console.log("hii");
-            res.render("../views/signin.ejs",{message:"signin or singup first"});
-            }}
-        catch(error)
-        {
-            console.log(error)
-        }
+    //  const appabout =async(req,res)=>{
+    //     try{
+    //         if(req.cookies.jwt)
+    //         {
+    //             const verify=jwt.verify(req.cookies.jwt,"thisismyfirstnodejsexpressmongodbproject")
+    //     console.log("this is verification"+verify);
+    //     console.log("this is about block");
+    //     console.log(verify.name)
+    //     res.render("../views/about.ejs",{user:verify.name});}
+    //     else{
+    //         console.log("hii");
+    //         res.render("../views/signin.ejs",{message:"signin or singup first"});
+    //         }}
+    //     catch(error)
+    //     {
+    //         console.log(error)
+    //     }
         
             
-         }
+    //      }
 const logout=(req,res)=>{
         res.clearCookie('jwt');
         res.clearCookie('employerjwt'); 
@@ -430,7 +422,7 @@ const userdata=(async(req,res)=>{
                       },
                         })
                         const mailOptions = {
-                            from: '20311a1206@sreenidhi.edu.in',
+                            from: process.env.EMAIL,
                             to: req.body.email,
                             subject: 'JobForger',
                             text: `your OTP : ${otp1}\n `,
@@ -483,30 +475,23 @@ const verifyotp=(req,res)=>{
         else{
         res.render("../views/changepassword.ejs",{message:"password not match"})
         }}
-    const applicationsearch=(req,res)=>{
-            try{
-                console.log("hieeeeeeeeee")
-            res.render("forgotpassword.ejs",{message:"wrong otp Access Denied"})
-            }
-            catch(error)
-            {
-                console.log(error)
-            }
-        }
+    // const applicationsearch=(req,res)=>{
+    //         try{
+    //             console.log("hieeeeeeeeee")
+    //         res.render("forgotpassword.ejs",{message:"wrong otp Access Denied"})
+    //         }
+    //         catch(error)
+    //         {
+    //             console.log("hi")
+    // console.log(error.message);
+    // throw new Error(error.message);
+    //         }
+    //     }
 const viewapplications=async(req,res)=>{
-            try{
-                if(req.cookies.jwt)
-                {
-                const verify=jwt.verify(req.cookies.jwt,"thisismyfirstnodejsexpressmongodbproject")
-            console.log("this is verification"+verify);
-            console.log("this is about block");
-            console.log(verify);
-            const doc=await Applicationcollection.find({email:verify.email});
+            try{ 
+            const doc=await Applicationcollection.find({email:req.myemail});
             res.render("../views/myapplications.ejs",{applications:doc,user:req.myusername});}
-            else{
-                console.log("hii");
-                res.render("../views/signin.ejs",{message:"signin or singup first"});
-                }}
+            
             catch(error)
             {
                 console.log(error)
@@ -516,8 +501,9 @@ const viewapplications=async(req,res)=>{
         const corejobsapi=async(req,res)=>{
             console.log("hiiiiiiiiiii");
             
+            const Collectionjob=mongoose.model("corejobs",jobschema);
             try{
-                let p = await Corejob.find();
+                let p = await Collectionjob.find();
                 console.log(p);
                 res.json(p);
             }
@@ -525,6 +511,7 @@ const viewapplications=async(req,res)=>{
             {
                 console.log(error);
             }
+           
            
         }
       
@@ -543,4 +530,99 @@ const viewapplications=async(req,res)=>{
             }
            
         }
-module.exports={index,applicationformsubmit,signup,aboutpage,searchjob,jobs,searchindexjob,about,logout,signinhandle,userdata,sendotp,verifyotp,confirmpassword,applicationsearch,viewapplications,corejobsapi,softwarejobsapi}
+
+        function getDateNDaysBack(n) {
+    const currentDate = new Date(); 
+    const targetDate = new Date(currentDate); 
+
+    
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+
+    
+    const millisecondsNDays = n * millisecondsInDay;
+
+    // Calculate the timestamp 'n' days ago
+    const targetTimestamp = currentDate.getTime() - millisecondsNDays;
+
+    // Set the target date to 'n' days ago
+    targetDate.setTime(targetTimestamp);
+
+    return targetDate;
+}
+function getDateNMonthsBack(n) {
+    const currentDate = new Date(); // Get the current date
+    const targetDate = new Date(currentDate); // Copy the current date to modify it
+
+    // Get the current year and month
+    let currentYear = currentDate.getFullYear();
+    let currentMonth = currentDate.getMonth();
+
+    // Calculate the target month after subtracting 'n' months
+    let targetMonth = currentMonth - n;
+
+    // Adjust the year if target month is negative
+    if (targetMonth < 0) {
+        targetMonth += 12; // Add 12 months to wrap around to the previous year
+        currentYear--; // Decrease the current year
+    }
+
+    // Set the target date to 'n' months ago
+    targetDate.setFullYear(currentYear, targetMonth);
+
+    return targetDate;
+}
+
+
+
+
+const applicationdocument=async(req,res)=>{
+  try {
+      const timeRange = req.query.timeRange;
+      let startDate;
+
+      if (timeRange === 'today') {
+          startDate = new Date();
+          startDate.setHours(0, 0, 0, 0);
+      } else if (timeRange === '5days') {
+        startDate=getDateNDaysBack(5)
+      } else if (timeRange === '10days') {
+        startDate=getDateNDaysBack(10)
+      } else if (timeRange === '1month') {
+        startDate=getDateNMonthsBack(1)  
+      } else if (timeRange === '2months') {
+        startDate= getDateNMonthsBack(2) 
+      } else if (timeRange === '3months') {
+        startDate=getDateNMonthsBack(3) 
+      }
+                const documents = await Applicationcollection.aggregate([
+                    {
+                        $match: {
+                            category: req.query.category,
+                            applieddate: { $gte: startDate }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: { $toLower: '$companyname' }, 
+                            count: { $sum: 1 }
+                        }
+                       
+                    },
+                    {
+                        $sort:{
+                            _id:1
+                            
+                        }
+                    }
+                ]);
+        
+                const labels = documents.map(doc => doc._id);
+                const documentCounts = documents.map(doc => doc.count);
+        
+                res.json({ labels, documentCounts });
+            } catch (error) {
+                console.error('Error fetching documents:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        }
+module.exports={index,applicationformsubmit,signup,aboutpage,searchjob,jobs,searchindexjob,about,logout,signinhandle,userdata,sendotp,verifyotp,confirmpassword,viewapplications,corejobsapi,softwarejobsapi,applicationdocument}

@@ -35,7 +35,7 @@
         }
 
         .container {
-            background-color: #f8f9fa;
+            background-color: #d4d9d9; /* Change this color to the desired light color */
             flex-grow: 1;
             overflow-y: scroll;
             padding: 10px;
@@ -151,7 +151,7 @@
             </div>
         </nav>
 
-        <div class="container" id="messageContainer" style="display: none;">
+        <div class="container" id="messageContainer">
             
         </div>
         <div id="send-container">
@@ -174,15 +174,13 @@
     </div>
 
     
-    <div id="myModal" class="modal">
-        <div class="modal-content">
+    <div id="myModal" class="modal "  >
+        <div class="modal-content" style="background-image: url('/images/chatgpt2.jpeg'); background-size: cover;">
             <div class="row">
-                <div class="col-md-6 order-md-2">
-                    <img src="/images/chatpicture.jpg" alt="User Image" class="img-fluid ">
-                </div>
                 <div class="col-md-6 order-md-1 p-5 pr-0">
-                    <h1 class="mb-4">Enter Name to Join</h1>
-                    <input type="text" id="username" class="form-control mb-3" placeholder="Enter your name" required>
+                    <h1 class="mb-4 mb-5 " style="color: #f8f9fa; font-weight: bold;"> AI ChatBot</h1>
+                    <input type="text" id="username" class="form-control mb-3" value="<%= user%>"readonly>
+                    <input type="text" id="email" class="form-control mb-3" value="<%= email%>" readonly>
                     <button id="joinChat" class="btn btn-primary btn-block">Join Chat</button>
                     <a href="/about" id="aboutBtn" class="btn btn-secondary btn-block mt-3">About</a>
                 </div>
@@ -202,8 +200,8 @@
         const messageContainer = document.getElementById('messageContainer');
         const usernameDisplay = document.getElementById('usernameDisplay');
         const modal = document.getElementById("myModal");
-
         const appendMessage = (message, position) => {
+
             const messageElement = document.createElement('div');
             messageElement.innerText = message;
             messageElement.classList.add('message', position);
@@ -211,57 +209,56 @@
            
            
             messageContainer.scrollTop = messageContainer.scrollHeight;
+
         };
 
-        
+       var  message="";
         // document.getElementById('aboutBtn').addEventListener('click', () => {
            
         //     window.location.href = "#about";
         // });
-
+        
         document.getElementById('joinChat').addEventListener('click', () => {
             const username = document.getElementById('username').value;
-
-            if (!username) {
-                alert("Please enter your name to join the chat.");
-                return;
-            }
-
+         const email=document.getElementById('email').value
+            
+            message=`my name is ${username} `;
             usernameDisplay.textContent = username;
 
-            socket.emit('new-user-joined', username);
-
+            socket.emit('chatgptconnect', {username,email});
+           
             modal.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
             modal.style.transition = "background-color 0.5s ease";
-
+         
             modal.style.display = "none";
-
+     
             
             messageContainer.style.display = "block";
         });
         document.getElementById('sendBtn').addEventListener('click', () => {
-            const message = messageInput.value.trim();
+            const username = document.getElementById('username').value;
+            const email=document.getElementById('email').value
+            const actualmessage = messageInput.value.trim();
+           message=message+"till that  is our previous convrsation' now give answser  tp question present after last appearence of that sentence "+actualmessage+" ";
             if (message !== '') {
-                appendMessage(`You: ${message}`, 'right');
-                socket.emit("send", message);
+                appendMessage(`You: ${actualmessage}`, 'right');
+                console.log(username)
+                socket.emit("chatgptquery", {email,message});
                 messageInput.value = "";
             }
         });
-
-        socket.on('receive', (data) => {
-            appendMessage(`${data.username}: ${data.message}`, 'left');
-        });
-
-        socket.on('user-joined', (username) => {
-            appendMessage(`${username} joined the chat`, 'left');
-        });
-
-        socket.on('left', (username) => {
-            appendMessage(`${username} left the chat`, 'left');
+       
+        socket.on('gptmessage', (data) => {
+            // const username = document.getElementById('username').value;
+            message=message+"gptmessage :"+data.message;
+            appendMessage(`gpt: ${data.message}`, 'left');
         });
 
         document.getElementById('endChatBtn').addEventListener('click', () => {
-            socket.disconnect();
+            const username = document.getElementById('username').value;
+            const email=document.getElementById('email').value
+            console.log("gptuser left",email);
+            socket.emit("gptuserleft",email);
         });
     </script>
 </body>

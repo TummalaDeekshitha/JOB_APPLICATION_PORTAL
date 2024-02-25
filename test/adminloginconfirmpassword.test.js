@@ -28,12 +28,9 @@ describe('adminloginconfirmpassword function', () => {
     });
 
     it('should render adminlogin.ejs with success message if passwords match', async () => {
-        // Stub bcrypt.hash to return the hashed password
+        
         sinon.stub(bcrypt, 'hash').resolves('hashedPassword');
-
-        // Stub updateOne to return a success response
         updateOneStub.resolves({ nModified: 1 });
-
         await adminloginconfirmpassword(req, res);
 
         expect(updateOneStub.calledOnceWith({ email: 'test@example.com' }, { $set: { pass: 'hashedPassword' } })).to.be.true;

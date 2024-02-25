@@ -82,7 +82,7 @@ const employerloginhandler=async(req,res)=>{
 
 const employersendotp=async(req,res)=>{
         console.log(req.body.email);
-        const result =await Employerdetail.findOne({email:req.body.email})
+        // const result =await Employerdetail.findOne({email:req.body.email})
         const result1=await Employerdetail.countDocuments({email:req.body.email})
         //const resultn=await db1.find({});
         try{
@@ -211,11 +211,14 @@ const findcandidate=async(req,res)=>{
     let no = (r > 0) ? Math.floor((count / limit) + 1) : Math.floor(count / limit);
    console.log(count);
    console.log(no);
+   console.log({totalPages:no,Category:cat,Job:role,status:`${status}`,user:req.myusername});
    res.render("../views/matchcandidates.ejs",{totalPages:no,Category:cat,Job:role,status:`${status}`,user:req.myusername})
    }
    catch(error)
    {
-   console.log(error);
+  //  console.log(error.message);
+  //  res.send(error);
+  throw new Error(error.message);
    }
        
    }
@@ -254,11 +257,14 @@ const findcandidate=async(req,res)=>{
     let no = (r > 0) ? Math.floor((count / limit) + 1) : Math.floor(count / limit);
    console.log(count);
    console.log(no);
+   console.log({totalPages:no,Category:cat,Job:role,company:company,status:`${status1}`,user:req.myusername})
    res.render("../views/allmatched.ejs",{totalPages:no,Category:cat,Job:role,company:company,status:`${status1}`,user:req.myusername})
    }
    catch(error)
    {
-   console.log(error);
+    console.log("hi")
+    console.log(error.message);
+    throw new Error(error.message);
    }
        
    }
@@ -301,11 +307,14 @@ const findcandidate=async(req,res)=>{
     let no = (r > 0) ? Math.floor((count / limit) + 1) : Math.floor(count / limit);
    console.log(count);
    console.log(no);
+   console.log({totalPages:no,Category:cat,Job:role,company:company, status:`${status}`,user:req.myusername})
    res.render("../views/mypostapplication.ejs",{totalPages:no,Category:cat,Job:role,company:company, status:`${status}`,user:req.myusername})
    }
    catch(error)
    {
-   console.log(error);
+    console.log("hi")
+    console.log(error.message);
+    throw new Error(error.message);
    }
        
    }
@@ -340,14 +349,16 @@ const findcandidate=async(req,res)=>{
            documents=await Applicationcollection.find({status:`${status}`}).sort({applieddate:1}).skip(skip).limit(10);
         }
         if (documents && documents.length > 0) {
+          console.log(documents);
           res.json(documents);
         } else {
-          
+          console.log("bye")
           res.status(404).json({ error: "No documents found" });
         }
       } catch (error) {
-        console.error("Error fetching documents:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.log("hi");
+        console.log(error.message);
+        throw new Error(error.message);;
       }
 
     
@@ -481,6 +492,7 @@ const getDocumentscompany=async(req,res)=>{
         
         return res.status(404).send("Document not found");
       }
+      console.log({ doc: doc })
   
       res.render("displayresume.ejs", { doc: doc });
     } catch (error) {
@@ -492,21 +504,25 @@ const getDocumentscompany=async(req,res)=>{
 const sendmail=(req,res)=>
   {
     try{
-      if(req.cookies.employerjwt)
-      {
-          const verify=jwt.verify(req.cookies.employerjwt,"thisismyfirstnodejsexpressmongodbproject")
-  console.log("this is verification"+verify);
-  console.log(req.query.email);
-  console.log(verify.email);
+  //     if(req.cookies.employerjwt)
+  //     {
+  //         const verify=jwt.verify(req.cookies.employerjwt,"thisismyfirstnodejsexpressmongodbproject")
+  // console.log("this is verification"+verify);
+  // console.log(req.query.email);
+  // console.log(verify.email);
   
-  res.render("../views/mail.ejs",{from:verify.email ,to:req.query.email,Category:req.query.category,Job:req.query.job,company:req.query.company})}
-  else{
-      console.log("hii");
-      res.render("../views/employerlogin.ejs",{message:"Sorry your session timeout please do login"});
-      }}
+  res.render("../views/mail.ejs",{from:req.myemail ,to:req.query.email,Category:req.query.category,Job:req.query.job,company:req.query.company})
+}
+  // else{
+  //     console.log("hii");
+  //     res.render("../views/employerlogin.ejs",{message:"Sorry your session timeout please do login"});
+  //     }
+
   catch(error)
   {
-      console.log(error)
+     console.log("hiii");
+     console.log(error.message);
+      throw new Error(error.message);;
   }
   
    
@@ -522,14 +538,14 @@ const submitmail=(req,res)=>{
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: '20311a1206@sreenidhi.edu.in', 
-        pass: '20311A1206'
+        user: process.env.EMAIL,
+        pass: process.env.EMAILPASSWORD,
       },
     });
     console.log(to)
   
     const mailOptions = {
-      from: '20311A1206@sreenidhi.edu.in',
+      from:process.env.EMAIL ,
       to: to,
       subject: subject,
       text: body,
@@ -585,20 +601,12 @@ const submitmail=(req,res)=>{
   }
 
 const viewyourposts=async(req,res)=>{
-    if(req.cookies.employerjwt)
-    {
-        const verify=jwt.verify(req.cookies.employerjwt,"thisismyfirstnodejsexpressmongodbproject")
-  console.log("this is verification"+verify);
-  console.log("this is about block");
-  console.log(verify.email);
-  var software=await Softwarejob.find({employeremail:verify.email})
-  var core=await Corejob.find({employeremail:verify.email})
-  res.render("../views/myposts.ejs",{softwareposts :software,coreposts:core,user:verify.name});
-   }
+   
+  var software=await Softwarejob.find({employeremail:req.myemail})
+  var core=await Corejob.find({employeremail:req.myemail})
   
-    else{
-      res.render("../views/employerlogin.ejs",{message:"session time out"})
-    }
+  res.render("../views/myposts.ejs",{softwareposts :software,coreposts:core,user:req.myusername});
+  
  }
 const removepost=async(req,res)=>
 {

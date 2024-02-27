@@ -24,7 +24,7 @@ const employerschema=new mongoose.Schema({
     },
     photo:{
         type:String,
-        default:"/profile.jpg"
+        required:true
     },
     eligible:{
         type: Boolean,

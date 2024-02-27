@@ -71,6 +71,9 @@ nav a {
         .approved {
             background-color: #d9f4cd;
         }
+        .rejected{
+            background-color: #d65858;
+        }
     </style>
 </head>
 <body>
@@ -93,7 +96,7 @@ nav a {
     <h1 class="mb-4">My Applications</h1>
 
     <% applications.forEach(application => { %>
-        <div class="card mb-3 <%= application.status === 'approved' ? 'approved' : 'applied' %>">
+        <div class="card mb-3 <%= application.status === 'approved' ? 'approved' : application.status === 'rejected' ? 'rejected' : 'applied' %>">
             <div class="row g-0">
                 <!-- <%if (application.logo?.data){%>
                     <div class="col-md-2" >
@@ -110,6 +113,8 @@ nav a {
 
                         <% if (application.status === 'approved') { %>
                             <p class="card-text text-success">Approved</p>
+                        <% } else if (application.status === 'rejected') { %>
+                            <p class="card-text text-danger">Rejected</p>
                         <% } else { %>
                             <p class="card-text text-primary">Applied</p>
                         <% } %>

@@ -6,13 +6,13 @@
   "scripts": {
     "coverage": "nyc npm run test",
     "test": "mocha test/*.test.js",
-    "custom-test": "mocha test/gpt.test.js",
+    "custom-test": "mocha test/employerschemacoll.test.js",
     "start": "nodemon node main.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1556.0",
+    "aws-sdk": "^2.1565.0",
     "bcrypt": "^5.1.1",
     "chai-http": "^4.4.0",
     "cookie-parser": "^1.4.6",

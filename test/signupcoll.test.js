@@ -38,14 +38,14 @@ describe('Signupcoll Model', () => {
         it('should handle errors during token generation', async () => {
             const signup = new Signupcoll({ name: 'Test User', email: 'test@example.com', pass: 'password123' });
 
-            const jwtStub = sinon.stub(jwt, 'sign').throws(new Error('Mocked JWT Error'));
+            const jwtStub = sinon.stub(jwt, 'sign').throws(new Error());
             const consoleErrorStub = sinon.stub(console, 'error');
 
             const token = await signup.generateAuthToken();
 
             expect(token).to.be.undefined;
             expect(jwtStub.calledOnce).to.be.true;
-            expect(consoleErrorStub.calledOnceWithExactly('the error Mocked JWT Error')).to.be.true;
+            expect(consoleErrorStub.calledOnceWithExactly('the error Error: Mocked JWT Error')).to.be.true;
 
             jwtStub.restore();
             consoleErrorStub.restore();

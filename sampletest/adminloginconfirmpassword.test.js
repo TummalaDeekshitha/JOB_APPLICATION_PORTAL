@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const bcrypt = require('bcrypt');
-const Employerdetail = require('../model/employerschemacoll');
+const Employerdetail = require('../model/employerschemacoll.js');
 const {adminloginconfirmpassword} = require('../controllers/admincontroller.js');
 
 describe('adminloginconfirmpassword function', () => {

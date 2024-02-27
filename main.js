@@ -36,7 +36,7 @@ app.use("/admin", admin);
 const {chatgpt}=require("./gpt.js");
 
 
-app.get('/images/:key', (req, res) => {
+app.get('/s3bucket/:key', (req, res) => {
     const key = req.params.key;
     const readstream = getfilestream(key);
     readstream.pipe(res);

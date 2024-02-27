@@ -23,8 +23,7 @@
         }
 
         .container1 {
-            width: 100%;
-            max-width: 1000px;
+            width: 500px;
             height: 80%;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -39,6 +38,7 @@
             flex-grow: 1;
             overflow-y: scroll;
             padding: 10px;
+            overflow: hidden;
         }
 
         .message {
@@ -54,7 +54,7 @@
             float: right;
             clear: both;
         }
-
+                          
         .left {
             background-color: #e9ecef;
             clear: both;
@@ -239,8 +239,9 @@
             const username = document.getElementById('username').value;
             const email=document.getElementById('email').value
             const actualmessage = messageInput.value.trim();
-           message=message+"till that  is our previous convrsation' now give answser  tp question present after last appearence of that sentence "+actualmessage+" ";
-            if (message !== '') {
+           
+            if (actualmessage !== '') {
+                message=message+"till that  is our previous convrsation' now give answser  to question present after last appearence of that sentence "+actualmessage+" ";
                 appendMessage(`You: ${actualmessage}`, 'right');
                 console.log(username)
                 socket.emit("chatgptquery", {email,message});

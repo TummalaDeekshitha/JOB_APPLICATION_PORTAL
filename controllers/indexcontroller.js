@@ -78,7 +78,7 @@ const applicationformsubmit=async (req, res) => {
         console.log(req.file);
         const jobnamevalue = req.body.jobname;
         console.log(jobnamevalue);
-
+    
        
         var count = await Applicationcollection.countDocuments({
             email: req.body.email,
@@ -214,7 +214,9 @@ const aboutpage=async(req,res)=>{
        res.render('../views/signin.ejs',{message:"you don't have account"});
    }}
    catch (error) {
-       console.error('Error comparing passwords:', error);
+    console.log("hi")
+    console.log(error.message);
+    throw new Error(error.message);
      }
    
    
@@ -254,20 +256,30 @@ const searchjob = async (req, res) => {
 };
 
 
-const jobs=async(req,res)=>{
+const jobs = async (req, res) => {
     console.log(req.myusername);
-     const cat=req.query.category;
-     const job=new mongoose.model(`${cat}`,jobschema);
-     const data=await job.find();
-     res.render("../views/requestedjobs.ejs",{jobdata:data,category:cat,user:req.myusername})
- }
+    const cat = req.query.category;
+    console.log('Category:', cat);
+try {
+        var jobmodal = mongoose.model(cat, jobschema);
+        console.log('Model:', jobmodal);
+        const data = await jobmodal.find();
+        console.log('Data:', data);
+        res.render("../views/requestedjobs.ejs", { jobdata: data, category: cat, user: req.myusername });
+    } catch (error) {
+        console.log("hi")
+        console.log(error.message);
+        throw new Error(error.message);
+    }
+}
+
 const searchindexjob =async(req,res)=>{
     var query=req.query.myquery;
     var category=req.query.category;
     console.log(category);
     console.log(query);
     let doc;
-    if (query && query.trim() === '') {
+    if (query==="" || query.trim() === '') {
         const Collectionjob=mongoose.model(category,jobschema);
         doc = await Collectionjob.aggregate([
             {
@@ -352,7 +364,7 @@ const about =async(req,res)=>{
         }}
     catch(error)
     {
-        console.log(error)
+      throw new Error(error.message);
     }
     
         

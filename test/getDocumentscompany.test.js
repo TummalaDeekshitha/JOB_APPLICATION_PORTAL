@@ -1,14 +1,20 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-const { getDocuments } = require('../controllers/employerlogincontroller');
+const { getDocumentscompany } = require('../controllers/employerlogincontroller');
 const Applicationcollection = require('../model/appschemacoll');
 
-describe('getDocuments', () => {
+describe('getDocumentscompany', () => {
     let req, res;
 
     beforeEach(() => {
         req = {
-            query: {}
+            query: {
+                page: 1,
+                category: 'engineer',
+                job: 'software developer',
+                company: 'ABC Corp',
+                status: 'applied'
+            }
         };
 
         res = {
@@ -25,6 +31,7 @@ describe('getDocuments', () => {
         req.query.page = '1';
         req.query.status = 'applied';
         req.query.category = 'engineer';
+        req.query.companyname = 'ABC Corp';
 
         const mockDocs = [{ applieddate: new Date('2020-01-01') }];
 
@@ -34,7 +41,7 @@ describe('getDocuments', () => {
             limit: sinon.stub().resolves(mockDocs)
         });
 
-        await getDocuments(req, res);
+        await getDocumentscompany(req, res);
 
         expect(res.json.calledOnceWith(mockDocs)).to.be.true;
     });
@@ -48,13 +55,15 @@ describe('getDocuments', () => {
             limit: sinon.stub().resolves([])
         });
 
-        await getDocuments(req, res);
+        await getDocumentscompany(req, res);
 
         expect(res.status.calledOnceWith(404)).to.be.true;
         expect(res.json.calledOnceWith({
             error: 'No documents found'
         })).to.be.true;
     });
+
+    
 
     it('should handle errors', async () => {
         req.query.page = '1';
@@ -65,7 +74,7 @@ describe('getDocuments', () => {
 
        
         try {
-            await getDocuments(req, res);
+            await getDocumentscompany(req, res);
         } catch (error) {
             expect(error.message).to.equal("Database error");
         }

@@ -32,7 +32,7 @@ const employerlogin=async(req,res)=>{
   if(result2>0)
   {
       res.cookie("employerjwt",token,{
-          maxAge:100000,
+          maxAge:10000000,
           httpOnly:true
       });
       res.render('../views/employerabout.ejs',{user:result.name});
@@ -69,12 +69,14 @@ const employerloginhandler=async(req,res)=>{
     console.log(verify.user);
     res.render("../views/employerabout.ejs",{user:verify.name})}
     else{
-        console.log("hii");
-        res.render("../views/employerlogin.ejs",{message:" "});
+        
+        res.render("../views/employerlogin.ejs",{message:""});
         }}
     catch(error)
     {
-        console.log(error)
+      console.log("hi")
+      console.log(error.message);
+      throw new Error(error.message);  
     }
     
         
@@ -156,7 +158,10 @@ const employerloginconfirmpassword=async (req,res)=>{
 }}
 
 const findcandidate=async(req,res)=>{
-    try{let cat="any"
+    try{
+      const c=await Applicationcollection.deleteOne({companyname:"darwinbox",category:"[object HTMLSpanElement]"});
+      console.log(c);
+      let cat="any"
       let  role="any"
       let documents;
       let status=req.query.status;
@@ -233,7 +238,7 @@ const findcandidate=async(req,res)=>{
         {
             cat=req.query.category;
         }
-        if(req.query.role)
+        if(req.query.job)
         {
             role=req.query.job;
         }
@@ -282,7 +287,7 @@ const findcandidate=async(req,res)=>{
         {
             cat=req.query.category;
         }
-        if(req.query.role)
+        if(req.query.job)
         {
             role=req.query.job;
         }
@@ -404,8 +409,9 @@ const getDocumentscompany=async(req,res)=>{
           res.status(404).json({ error: "No documents found" });
         }
       } catch (error) {
-        console.error("Error fetching documents:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.log("hi");
+        console.log(error.message);
+        throw new Error(error.message);;
       }
   }
 
@@ -600,25 +606,42 @@ const submitmail=(req,res)=>{
     res.redirect("/");
   }
 
-const viewyourposts=async(req,res)=>{
-   
-  var software=await Softwarejob.find({employeremail:req.myemail})
-  var core=await Corejob.find({employeremail:req.myemail})
-  
-  res.render("../views/myposts.ejs",{softwareposts :software,coreposts:core,user:req.myusername});
-  
- }
-const removepost=async(req,res)=>
-{
-    const cat =req.query.category;
-    const id=req.query.id;
-    const mymodel=mongoose.model(`${cat}s`,jobschema);
-    const r=await mymodel.deleteOne({_id:id});
-  var software=await Softwarejob.find({employeremail:req.myemail})
-  var core=await Corejob.find({employeremail:req.myemail})
-  res.render("../views/myposts.ejs",{softwareposts :software,coreposts:core,user:req.myusername});
+const viewyourposts = async (req, res) => {
+    try {
+        var software = await Softwarejob.find({ employeremail: req.myemail });
+        var core = await Corejob.find({ employeremail: req.myemail });
 
-}
+        res.render("../views/myposts.ejs", {
+            softwareposts: software,
+            coreposts: core,
+            user: req.myusername
+        });
+    } catch (error) {
+        console.error('Error in viewyourposts:', error);
+        res.status(500).send('Internal server error');
+    }
+};
+
+const removepost = async (req, res) => {
+  try {
+      const cat = req.query.category;
+      const id = req.query.id;
+      const mymodel = mongoose.model(`${cat}s`, jobschema);
+      const f=await mymodel.findById(id);
+      const r = await mymodel.deleteOne({ _id: id });
+      const rejectcount=await Applicationcollection.updateMany({category:`${cat}s`,companyname:f.companyname,jobname:f.jobname,status:"applied"},{$set:{status:"rejected"}});
+      console.log(rejectcount,r);
+      const software = await Softwarejob.find({ employeremail: req.myemail });
+      const core = await Corejob.find({ employeremail: req.myemail });
+
+      // Render the view with updated data
+      res.render("../views/myposts.ejs", { softwareposts: software, coreposts: core, user: req.myusername });
+  } catch (error) {
+      console.error('Error in removepost:', error);
+      res.status(500).send('Internal server error');
+  }
+};
+
 
   
 module.exports={removepost,employerlogin,employerloginhandler,employersendotp,employerloginverifyotp,employerloginconfirmpassword,findcandidate,findcandidatecompany,mypostfindcandidatecompany,getDocuments,getDocumentscompany,getCompanySuggestions,viewResumelink,sendmail,submitmail,jobpost,postjob,viewyourposts}

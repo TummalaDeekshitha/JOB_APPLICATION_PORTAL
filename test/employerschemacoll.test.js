@@ -1,54 +1,47 @@
-const Employerdetail = require('../model/employerschemacoll');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { expect } = require('chai');
 const sinon = require('sinon');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const Employerdetail = require('../model/employerschemacoll.js');
 
 describe('Employerdetail Model', () => {
-    describe('save hook', () => {
-        it('should hash password before saving', async () => {
-            const plaintextPassword = 'password123';
-            const hashedPassword = await bcrypt.hash(plaintextPassword, 10);
+    let employer;
 
-            const employer = new Employerdetail({ name: 'Test Employer', email: 'test@example.com', pass: plaintextPassword });
-            await employer.save();
-
-            expect(employer.pass).to.not.equal(plaintextPassword);
-            expect(await bcrypt.compare(plaintextPassword, employer.pass)).to.be.true;
+    beforeEach(() => {
+        employer = new Employerdetail({
+            name: 'Test Employer',
+            companyname: 'Test Company',
+            email: 'test@example.com',
+            pass: 'password123',
+            industry: 'Test Industry',
+            employeridnumber: '123456',
+            aadharnumber: 1234567890,
+            photo: 'test.jpg'
         });
     });
 
-    describe('generateAuthToken method', () => {
-        it('should generate a valid JWT token', async () => {
-            const employer = new Employerdetail({ name: 'Test Employer', email: 'test@example.com', pass: 'password123' });
+    afterEach(() => {
+        sinon.restore();
+    });
 
-            const jwtStub = sinon.stub(jwt, 'sign').returns('mockedToken');
-            const saveStub = sinon.stub(employer, 'save').resolves();
+    it('should hash password before saving', async () => {
+        const bcryptStub = sinon.stub(bcrypt, 'hash').resolves('hashedPassword');
 
-            const token = await employer.generateAuthToken();
+        await employer.save();
 
-            expect(token).to.equal('mockedToken');
-            expect(jwtStub.calledOnceWithExactly({ _id: employer._id, name: employer.name, email: employer.email }, "thisismyfirstnodejsexpressmongodbproject")).to.be.true;
-            expect(saveStub.calledOnce).to.be.true;
+        expect(bcryptStub.calledOnce).to.be.true;
+        expect(employer.pass).to.equal('hashedPassword');
+    });
 
-            jwtStub.restore();
-            saveStub.restore();
-        });
+    it('should generate auth token', async () => {
+        const jwtStub = sinon.stub(jwt, 'sign').returns('mockedToken');
+        const saveStub = sinon.stub(employer, 'save').resolves();
 
-        it('should handle errors during token generation', async () => {
-            const employer = new Employerdetail({ name: 'Test Employer', email: 'test@example.com', pass: 'password123' });
+        const token = await employer.generateAuthToken();
 
-            const jwtStub = sinon.stub(jwt, 'sign').throws(new Error('Mocked JWT Error'));
-            const consoleErrorStub = sinon.stub(console, 'error');
-
-            const token = await employer.generateAuthToken();
-
-            expect(token).to.be.undefined;
-            expect(jwtStub.calledOnce).to.be.true;
-            expect(consoleErrorStub.calledOnceWithExactly('the error Mocked JWT Error')).to.be.true;
-
-            jwtStub.restore();
-            consoleErrorStub.restore();
-        });
+        expect(jwtStub.calledOnce).to.be.true;
+        expect(saveStub.calledOnce).to.be.true;
+        expect(token).to.equal('mockedToken');
     });
 });

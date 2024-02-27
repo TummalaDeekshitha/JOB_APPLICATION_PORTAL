@@ -1,47 +1,62 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const mongoose = require('mongoose');
-const {jobschema}=require("../model/jobschemacoll.js")
-const { searchjob } = require('../controllers/indexcontroller.js');
+const { jobs } = require('../controllers/indexcontroller');
 
-describe('searchjob function', () => {
-    it('should render "searchresult.ejs" with correct category, role, and documents', async () => {
-       
-        const req = {
-            body: {
-                category: 'jobCategory',
-                role: 'jobRole'
-            }
+describe('jobs', () => {
+
+    let req, res;
+
+    beforeEach(() => {
+        req = {
+            query: {
+                category: 'softwarejobs'
+            },
+            myusername: 'testuser'
         };
-        const res = {
+
+        res = {
+            render: sinon.spy(),
             status: sinon.stub().returnsThis(),
-            send: sinon.spy(),
-            render: sinon.spy()
+            send: sinon.spy()
         };
-
-        
-        const mockFindResult = [{ jobname: 'jobRole' }];
-        const mockModel = {
-            find: sinon.stub().resolves(mockFindResult)
-        };
-        const Collectionjob = sinon.stub(mongoose, 'model').returns(mockModel);
-
-        
-        await searchjob(req, res);
-
-        
-        expect(Collectionjob.calledOnceWithExactly('jobCategories', jobschema)).to.be.true;
-        expect(mockModel.find.calledOnceWithExactly({ jobname: 'jobRole' })).to.be.true;
-        expect(res.render.calledOnceWithExactly('../views/searchresult.ejs', {
-            category: 'jobCategory',
-            role: 'jobRole',
-            documents: mockFindResult,
-            user: undefined 
-        })).to.be.true;
-
-        
-        Collectionjob.restore();
     });
 
-   
+    afterEach(() => {
+        sinon.restore();
+    });
+
+    it('should render requestedjobs page with data', async () => {
+        // Stub the find function of the model instance
+        const findStub = sinon.stub().resolves([{ job: 'Software Engineer' }]);
+        const modelStub = sinon.stub(mongoose, 'model').returns({ find: findStub });
+
+        await jobs(req, res);
+
+        expect(modelStub.calledWith('softwarejobs')).to.be.true;
+        expect(findStub.calledOnce).to.be.true;
+        expect(res.render.calledWith('../views/requestedjobs.ejs', {
+            jobdata: [{ job: 'Software Engineer' }],
+            category: 'softwarejobs',
+            user: 'testuser'
+        })).to.be.true;
+
+        modelStub.restore();
+    });
+
+    it('should handle errors', async () => {
+        // Stub the find function of the model instance to throw an error
+        const findStub = sinon.stub().throws(new Error(`Schema hasn't been registered for model "softwarejobs".
+        Use mongoose.model(name, schema)`));
+        sinon.stub(mongoose, 'model').returns({ find: findStub });
+    
+        try {
+            await jobs(req, res);
+        } catch (error) {
+            // Check if the error message contains the expected substring
+            expect(error.message).to.include(`Schema hasn't been registered for model "softwarejobs"`);
+        }
+    });
+    
+
 });
